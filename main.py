@@ -20,7 +20,7 @@ st.markdown(get_custom_css(), unsafe_allow_html=True)
 
 
 def download_resume():
-    # Replace 'path/to/your/resume.pdf' with the actual path to your resume file
+
     resume_path = "resume.pdf"
     with open(resume_path, "rb") as file:
         btn = st.download_button(
@@ -53,11 +53,11 @@ def sidebar():
 def home():
     col1, col2 = st.columns([1, 2])
     with col1:
-        # Check if the image file exists
+
         image_path = "photo.jpeg"
         if os.path.exists(image_path):
             image = Image.open(image_path)
-            st.image(image, width=200)
+            st.image(image, width=250)
         else:
             st.error(
                 "Profile picture not found. Please add 'profile_picture.jpg' to the project root."
@@ -70,7 +70,6 @@ def home():
             "Links: [GitHub](https://github.com/dimipash) | [LinkedIn](https://www.linkedin.com/in/dimitar-pashev-994174274/)"
         )
 
-        # Add the download resume button
         download_resume()
 
     st.markdown("---")
@@ -85,23 +84,22 @@ def home():
     )
 
 
-# Skills page
 def skills():
     st.title("Technical Skills")
 
     skills_data = {
         "Python": 90,
         "Django": 85,
-        "API Development": 80,
-        "PostgreSQL": 75,
-        "Version Control": 85,
-        "Bash": 70,
-        "Database Management": 80,
         "ReactJS": 75,
         "JavaScript": 70,
         "CSS": 75,
         "HTML": 80,
         "Linux": 70,
+        "API Development": 80,
+        "PostgreSQL": 75,
+        "Version Control": 85,
+        "Bash": 70,
+        "Database Management": 80,
     }
 
     for skill, proficiency in skills_data.items():
@@ -123,7 +121,6 @@ def skills():
         st.write(f"- {skill}")
 
 
-# Projects page
 def projects():
     st.title("Personal Projects")
 
@@ -134,12 +131,22 @@ def projects():
             "description": "Comprehensive set of features for managing an online shopping platform. Custom user model, categories and products, shopping cart, orders, inventory, user account management, PayPal payments.",
         },
         {
+            "name": "Django Projects",
+            "date": "09/2023 - 03/2024",
+            "description": "Various Django projects, including e-commerce site, web-based CV generator, link scraper, social media app, advanced expense tracker, calorie tracker, movie list, food app",
+        },
+        {
+            "name": "Python Projects",
+            "date": "01/2024 - ongoing",
+            "description": "This repository contains various Python projects, each in its own directory.",
+        },
+        {
             "name": "Django & React Notes App",
             "date": "02/2024 - 03/2024",
             "description": "Full-stack application built with Django and React, allowing users to create, read, and delete notes. Follows a RESTful API architecture and utilizes JSON Web Tokens (JWT) for authentication.",
         },
         {
-            "name": "Books E-commerce App",
+            "name": "Books React E-commerce App",
             "date": "11/2023 - 12/2023",
             "description": "E-commerce web app with React utilizing Vite, JSX, Tailwind CSS. Created reusable component logic with custom hooks, managed state with context API, implemented cart functionality.",
         },
@@ -153,7 +160,6 @@ def projects():
             )
 
 
-# Experience page
 def experience():
     st.title("Employment History")
 
@@ -176,6 +182,16 @@ def experience():
             "company": "Parkacre",
             "location": "Lincoln",
             "date": "APR 2017 - SEP 2017",
+            "responsibilities": [
+                "Operated machinery to ensure smooth production flow, reducing downtime by maintaining equipment",
+                "Collaborated with team to meet daily production targets, improving overall efficiency",
+            ],
+        },
+        {
+            "title": "Production Operative",
+            "company": "Moypark",
+            "location": "Lincoln",
+            "date": "JAN 2015 - MAR 2017",
             "responsibilities": [
                 "Operated machinery to ensure smooth production flow, reducing downtime by maintaining equipment",
                 "Collaborated with team to meet daily production targets, improving overall efficiency",
@@ -258,10 +274,8 @@ def github():
     st.title("My GitHub Repositories")
     st.write("Here are some of my recent GitHub repositories:")
 
-    # Replace with your GitHub username
     github_username = "dimipash"
 
-    # Fetch repositories from GitHub API
     url = f"https://api.github.com/users/dimipash/repos"
     try:
         response = requests.get(url)
@@ -277,10 +291,9 @@ def github():
             st.warning("No repositories found.")
             return
 
-        # Sort repositories by last updated date
         repos.sort(key=lambda r: r["updated_at"], reverse=True)
 
-        for repo in repos[:20]:  # Display the 10 most recently updated repos
+        for repo in repos[:20]:
             with st.expander(repo["name"]):
                 st.write(
                     f"**Description:** {repo.get('description', 'No description available')}"
@@ -304,7 +317,6 @@ def github():
         st.error("Please check your internet connection and try again later.")
 
 
-# Main app
 def main():
     page = sidebar()
 
