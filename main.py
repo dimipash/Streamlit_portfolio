@@ -257,17 +257,50 @@ def education():
 
     st.header("Courses")
     courses = [
-        ("Python OOP at SoftUni", "OCT 2022 - DEC 2022"),
-        ("Algorithms with Python at SoftUni", "JUL 2023 - AUG 2023"),
-        ("Python Web Basics at SoftUni", "MAY 2023 - JUN 2023"),
-        ("Python Web Framework at SoftUni", "JUN 2023 - AUG 2023"),
-        ("HTML & CSS at SoftUni", "JAN 2023 - FEB 2023"),
-        ("ReactJS at SoftUni", "OCT 2023 - DEC 2023"),
-        ("Foundational C# with Microsoft at Microsoft", "DEC 2023 - DEC 2023"),
+        (
+            "Programing Basics at SoftUni",
+            "JUL 2021 - SEP 2021",
+            "https://softuni.bg/certificates/details/116916/7d096178",
+        ),
+        (
+            "Python OOP at SoftUni",
+            "OCT 2022 - DEC 2022",
+            "https://softuni.bg/certificates/details/150462/c3e3696e",
+        ),
+        (
+            "Algorithms with Python at SoftUni",
+            "JUL 2023 - AUG 2023",
+            "https://softuni.bg/certificates/details/181201/864df479",
+        ),
+        (
+            "Python Web Basics at SoftUni",
+            "MAY 2023 - JUN 2023",
+            "https://softuni.bg/certificates/details/177835/4657f045",
+        ),
+        (
+            "Python Web Framework at SoftUni",
+            "JUN 2023 - AUG 2023",
+            "https://softuni.bg/certificates/details/182365/619a7290",
+        ),
+        (
+            "HTML & CSS at SoftUni",
+            "JAN 2023 - FEB 2023",
+            "https://softuni.bg/certificates/details/163183/5a08c061",
+        ),
+        (
+            "ReactJS at SoftUni",
+            "OCT 2023 - DEC 2023",
+            "https://softuni.bg/certificates/details/197959/a9d12e96",
+        ),
+        (
+            "Foundational C# with Microsoft at Microsoft",
+            "DEC 2023 - DEC 2023",
+            "https://freecodecamp.org/certification/dpashev/foundational-c-sharp-with-microsoft",
+        ),
     ]
 
-    for course, date in courses:
-        st.write(f"- **{course}** ({date})")
+    for course, date, link in courses:
+        st.markdown(f"- **[{course}]({link})** ({date})")
 
 
 def github():
