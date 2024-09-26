@@ -128,7 +128,7 @@ def projects():
         {
             "name": "Online Shop Django Project",
             "date": "03/2024 - 04/2024",
-            "description": "Comprehensive set of features for managing an online shopping platform. Custom user model, categories and products, shopping cart, orders, inventory, user account management, PayPal payments.",
+            "description": "[Online Shop](https://dimipi.pythonanywhere.com/) - a comprehensive set of features for managing an online shopping platform. Custom user model, categories and products, shopping cart, orders, inventory, user account management, PayPal payments.",
         },
         {
             "name": "Django Projects",
@@ -154,10 +154,7 @@ def projects():
 
     for project in projects_data:
         with st.expander(f"{project['name']} ({project['date']})"):
-            st.markdown(
-                f"<div class='project-card'>{project['description']}</div>",
-                unsafe_allow_html=True,
-            )
+            st.markdown(project["description"])
 
 
 def experience():
