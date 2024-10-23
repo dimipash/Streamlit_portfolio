@@ -7,7 +7,6 @@ import json
 from datetime import datetime
 from styles import get_custom_css
 
-
 # Set page config
 st.set_page_config(
     page_title="Dimitar Pashev - Portfolio",
@@ -18,9 +17,18 @@ st.set_page_config(
 # Apply custom CSS
 st.markdown(get_custom_css(), unsafe_allow_html=True)
 
+# JavaScript for smooth scrolling
+smooth_scroll_js = """
+<script>
+function scrollToSection(sectionId) {
+    document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+"""
+
+st.markdown(smooth_scroll_js, unsafe_allow_html=True)
 
 def download_resume():
-
     resume_path = "resume.pdf"
     with open(resume_path, "rb") as file:
         btn = st.download_button(
@@ -30,30 +38,27 @@ def download_resume():
             mime="application/pdf",
         )
 
-
 # Sidebar navigation
 def sidebar():
     with st.sidebar:
         st.title("Navigation")
-        page = st.radio(
-            "Go to",
-            [
-                "Home",
-                "Skills",
-                "Projects",
-                "Experience",
-                "Education",
-                "GitHub",
-            ],
-        )
-    return page
-
+        st.markdown("[Home](#home)", unsafe_allow_html=True)
+        st.markdown("[Skills](#skills)", unsafe_allow_html=True)
+        st.markdown("[Projects](#projects)", unsafe_allow_html=True)
+        st.markdown("[Experience](#experience)", unsafe_allow_html=True)
+        st.markdown("[Education](#education)", unsafe_allow_html=True)
+        st.markdown("[GitHub](#github)", unsafe_allow_html=True)
 
 # Home page
 def home():
-    col1, col2 = st.columns([1, 2])
+    st.markdown("<div id='home'></div>", unsafe_allow_html=True)
+    # Use a single column layout for smaller screens
+    if st.session_state.get('is_mobile', False):
+        col1, col2 = st.columns([1, 2])
+    else:
+        col1, col2 = st.columns([1, 2])
+    
     with col1:
-
         image_path = "photo.jpeg"
         if os.path.exists(image_path):
             image = Image.open(image_path)
@@ -69,7 +74,6 @@ def home():
         st.write(
             "Links: [GitHub](https://github.com/dimipash) | [LinkedIn](https://www.linkedin.com/in/dimitar-pashev-994174274/)"
         )
-
         download_resume()
 
     st.markdown("---")
@@ -83,10 +87,9 @@ def home():
     """
     )
 
-
 def skills():
+    st.markdown("<div id='skills'></div>", unsafe_allow_html=True)
     st.title("Technical Skills")
-
     skills_data = {
         "Python": 90,
         "Django": 85,
@@ -101,7 +104,6 @@ def skills():
         "Bash": 70,
         "Database Management": 80,
     }
-
     for skill, proficiency in skills_data.items():
         col1, col2 = st.columns([1, 3])
         with col1:
@@ -120,15 +122,19 @@ def skills():
     for skill in soft_skills:
         st.write(f"- {skill}")
 
-
 def projects():
+    st.markdown("<div id='projects'></div>", unsafe_allow_html=True)
     st.title("Personal Projects")
-
     projects_data = [
         {
             "name": "Online Shop Django Project",
             "date": "03/2024 - 04/2024",
             "description": "[Online Shop](https://dimipi.pythonanywhere.com/) - a comprehensive set of features for managing an online shopping platform. Custom user model, categories and products, shopping cart, orders, inventory, user account management, PayPal payments.",
+        },
+        {
+            "name": "SaaS Django Project",
+            "date": "08/2024 - 10/2024",
+            "description": "[SaaS](https://saas-dlp.up.railway.app/) - a foundational Software as a Service (SaaS) solution built with Django, featuring user authentication, subscription management, and custom commands.",
         },
         {
             "name": "Django Projects",
@@ -151,15 +157,13 @@ def projects():
             "description": "E-commerce web app with React utilizing Vite, JSX, Tailwind CSS. Created reusable component logic with custom hooks, managed state with context API, implemented cart functionality.",
         },
     ]
-
     for project in projects_data:
         with st.expander(f"{project['name']} ({project['date']})"):
             st.markdown(project["description"])
 
-
 def experience():
+    st.markdown("<div id='experience'></div>", unsafe_allow_html=True)
     st.title("Employment History")
-
     jobs = [
         {
             "title": "MPI Operator",
@@ -206,7 +210,6 @@ def experience():
             ],
         },
     ]
-
     for job in jobs:
         with st.expander(f"{job['title']} at {job['company']} ({job['date']})"):
             st.write(f"**Location:** {job['location']}")
@@ -214,11 +217,10 @@ def experience():
             for resp in job["responsibilities"]:
                 st.write(f"- {resp}")
 
-
 # Education page
 def education():
+    st.markdown("<div id='education'></div>", unsafe_allow_html=True)
     st.title("Education")
-
     educations = [
         {
             "degree": "Software Engineering",
@@ -239,7 +241,6 @@ def education():
             "date": "SEP 2001 - MAY 2006",
         },
     ]
-
     for edu in educations:
         st.markdown(
             f"""
@@ -295,18 +296,15 @@ def education():
             "https://freecodecamp.org/certification/dpashev/foundational-c-sharp-with-microsoft",
         ),
     ]
-
     for course, date, link in courses:
         st.markdown(f"- **[{course}]({link})** ({date})")
 
-
 def github():
+    st.markdown("<div id='github'></div>", unsafe_allow_html=True)
     st.title("My GitHub Repositories")
     st.write("Here are some of my recent GitHub repositories:")
-
     github_username = "dimipash"
-
-    url = f"https://api.github.com/users/dimipash/repos"
+    url = f"https://api.github.com/users/{github_username}/repos"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise an exception for bad status codes
@@ -324,11 +322,15 @@ def github():
         repos.sort(key=lambda r: r["updated_at"], reverse=True)
 
         for repo in repos[:20]:
+            repo_languages_url = repo["languages_url"]
+            languages_response = requests.get(repo_languages_url)
+            languages = languages_response.json().keys()
+
             with st.expander(repo["name"]):
                 st.write(
                     f"**Description:** {repo.get('description', 'No description available')}"
                 )
-                st.write(f"**Language:** {repo.get('language', 'Not specified')}")
+                st.write(f"**Languages:** {', '.join(languages) if languages else 'Not specified'}")
                 st.write(f"**Stars:** {repo['stargazers_count']}")
                 st.write(f"**Forks:** {repo['forks_count']}")
                 last_updated = datetime.strptime(
@@ -338,6 +340,11 @@ def github():
                 st.write(
                     f"**Repository URL:** [{repo['html_url']}]({repo['html_url']})"
                 )
+                
+                # Check for a homepage URL and display it as "Live Version"
+                homepage = repo.get('homepage')
+                if homepage:
+                    st.write(f"**Live Version:** [{homepage}]({homepage})")
 
     except requests.exceptions.RequestException as e:
         st.error(f"An error occurred while fetching GitHub repositories: {str(e)}")
@@ -346,23 +353,14 @@ def github():
             st.error(f"Response content: {e.response.text}")
         st.error("Please check your internet connection and try again later.")
 
-
 def main():
-    page = sidebar()
-
-    if page == "Home":
-        home()
-    elif page == "Skills":
-        skills()
-    elif page == "Projects":
-        projects()
-    elif page == "Experience":
-        experience()
-    elif page == "Education":
-        education()
-    elif page == "GitHub":
-        github()
-
+    sidebar()
+    home()
+    skills()
+    projects()
+    experience()
+    education()
+    github()
 
 if __name__ == "__main__":
     main()
