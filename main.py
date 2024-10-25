@@ -329,22 +329,20 @@ def github():
             with st.expander(repo["name"]):
                 st.write(
                     f"**Description:** {repo.get('description', 'No description available')}"
-                )
+                )                 
+                homepage = repo.get('homepage')
+                if homepage:
+                    st.write(f"**Live Version:** [{homepage}]({homepage})")
                 st.write(f"**Languages:** {', '.join(languages) if languages else 'Not specified'}")
-                st.write(f"**Stars:** {repo['stargazers_count']}")
-                st.write(f"**Forks:** {repo['forks_count']}")
+                # st.write(f"**Stars:** {repo['stargazers_count']}")
+                # st.write(f"**Forks:** {repo['forks_count']}")
                 last_updated = datetime.strptime(
                     repo["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
                 )
                 st.write(f"**Last Updated:** {last_updated.strftime('%Y-%m-%d')}")
                 st.write(
                     f"**Repository URL:** [{repo['html_url']}]({repo['html_url']})"
-                )
-                
-                # Check for a homepage URL and display it as "Live Version"
-                homepage = repo.get('homepage')
-                if homepage:
-                    st.write(f"**Live Version:** [{homepage}]({homepage})")
+                )              
 
     except requests.exceptions.RequestException as e:
         st.error(f"An error occurred while fetching GitHub repositories: {str(e)}")
