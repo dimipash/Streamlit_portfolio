@@ -171,7 +171,7 @@ class PortfolioData:
                 "name": "SaaS Django Project",
                 "date": "08/2024 - 10/2024",
                 "description": "[SaaS](https://saas-dlp.up.railway.app/) - a foundational Software as a Service (SaaS) solution built with Django, featuring user authentication, subscription management, and custom commands.",
-                "tech_stack": ["Python", "Django", "PostgreSQL", "Stripe API"],
+                "tech_stack": ["Python", "Django", "PostgreSQL"],
                 "live_demo": "https://saas-dlp.up.railway.app/",
                 "github_link": "https://github.com/dimipash/SaaS",
             },
@@ -200,6 +200,9 @@ class PortfolioData:
 class PortfolioUI:
     """UI components and layout for the portfolio website."""
     
+    def __init__(self):
+        self.config = Config()
+
     @staticmethod
     def render_skills_section(skills_data: Dict[str, Dict[str, Union[int, str]]]) -> None:
         """Render skills in a clean, organized format."""
@@ -214,12 +217,13 @@ class PortfolioUI:
         # Display skills by category
         for category, skills in skills_by_category.items():
             st.subheader(f"🔹 {category}")
-            for skill, proficiency in sorted(skills, key=lambda x: x[1], reverse=True):
-                col1, col2 = st.columns([3, 7])
-                with col1:
-                    st.write(f"**{skill}**")
-                with col2:
-                    st.progress(proficiency / 100)
+            skill_chunks = [skills[i:i + 3] for i in range(0, len(skills), 3)]
+            for chunk in skill_chunks:
+                cols = st.columns(len(chunk))
+                for i, (skill, proficiency) in enumerate(sorted(chunk, key=lambda x: x[1], reverse=True)):
+                    with cols[i]:
+                        st.markdown(f"<div style='text-align: center;'><strong>{skill}</strong></div>", unsafe_allow_html=True)
+                        st.progress(proficiency / 100)
 
     @staticmethod
     def skills() -> None:
@@ -336,16 +340,21 @@ class PortfolioUI:
     @staticmethod
     def render_navigation() -> None:
         """Render top navigation menu."""
-        st.markdown("""
+        st.markdown(
+            """
             <div class="nav-container">
-                <a href="#home" class="nav-link">🏠 Home</a>
-                <a href="#skills" class="nav-link">🛠️ Skills</a>
-                <a href="#projects" class="nav-link">💼 Projects</a>
-                <a href="#experience" class="nav-link">🚀 Experience</a>
-                <a href="#education" class="nav-link">📚 Education</a>
-                <a href="#contact" class="nav-link">📫 Contact</a>
+                <a href="#home" class="nav-link">🏠 <span>Home</span></a>
+                <a href="#skills" class="nav-link">🛠️ <span>Skills</span></a>
+                <a href="#projects" class="nav-link">💼 <span>Projects</span></a>
+                <a href="#experience" class="nav-link">🚀 <span>Experience</span></a>
+                <a href="#education" class="nav-link">📚 <span>Education</span></a>
+                <a href="#github" class="nav-link">🔗 <span>GitHub</span></a>
+                <a href="#courses" class="nav-link">🎓 <span>Courses</span></a>
+                <a href="#contact" class="nav-link">📫 <span>Contact</span></a>
             </div>
-            """, unsafe_allow_html=True)
+            """,
+            unsafe_allow_html=True,
+        )
 
     @staticmethod
     def setup_page() -> None:
@@ -356,12 +365,6 @@ class PortfolioUI:
             layout="wide",
             initial_sidebar_state="collapsed"
         )
-        
-        # Apply custom CSS
-        st.markdown(get_custom_css(), unsafe_allow_html=True)
-        
-        # Render navigation menu
-        PortfolioUI.render_navigation()
 
     @staticmethod
     def download_resume() -> None:
@@ -419,7 +422,7 @@ class PortfolioUI:
                 "title": "MPI Operator",
                 "company": "Bifrangi UK",
                 "location": "Lincoln, UK",
-                "date": "OCT 2017 - SEP 2022",
+                "date": "OCT 2017 - SEP 2024",
                 "responsibilities": [
                     "Ensured quality control via MPI equipment operation",
                     "Boosted product quality by maintaining defect detection rates",
@@ -467,7 +470,7 @@ class PortfolioUI:
             {
                 "degree": "Python Web Developer",
                 "school": "SoftUni",
-                "date": "2023 - 2024",
+                "date": "2022 - 2024",
                 "details": [
                     "Python OOP",
                     "Python Advanced",
@@ -505,13 +508,12 @@ class PortfolioUI:
                 for detail in edu["details"]:
                     st.write(f"- {detail}")
 
-    @staticmethod
-    def github() -> None:
+    def github(self) -> None:
         """Render GitHub section."""
         st.markdown("<div id='github'></div>", unsafe_allow_html=True)
         st.title("My GitHub Repositories")
         st.write("Here are some of my recent GitHub repositories:")
-        github_username = "dimipash"
+        github_username = self.config.GITHUB_USERNAME
         url = f"https://api.github.com/users/{github_username}/repos"
         try:
             response = requests.get(url)
@@ -565,13 +567,13 @@ class PortfolioUI:
         st.markdown("<div id='courses'></div>", unsafe_allow_html=True)
         st.title("Courses")
         courses = [
-            ("Python OOP at SoftUni", "OCT 2022 - DEC 2022", "LINK_FOR_CERTIFICATE_1"),
-            ("Algorithms with Python at SoftUni", "JUL 2023 - AUG 2023", "LINK_FOR_CERTIFICATE_2"),
-            ("Python Web Basics at SoftUni", "MAY 2023 - JUN 2023", "LINK_FOR_CERTIFICATE_3"),
-            ("Python Web Framework at SoftUni", "JUN 2023 - AUG 2023", "LINK_FOR_CERTIFICATE_4"),
-            ("HTML & CSS at SoftUni", "JAN 2023 - FEB 2023", "LINK_FOR_CERTIFICATE_5"),
-            ("ReactJS at SoftUni", "OCT 2023 - DEC 2023", "LINK_FOR_CERTIFICATE_6"),
-            ("Foundational C# with Microsoft at Microsoft", "DEC 2023 - DEC 2023", "LINK_FOR_CERTIFICATE_7"),
+            ("Python OOP at SoftUni", "OCT 2022 - DEC 2022", "https://softuni.bg/certificates/details/150462/c3e3696e"),
+            ("Algorithms with Python at SoftUni", "JUL 2023 - AUG 2023", "https://softuni.bg/certificates/details/181201/864df479"),
+            ("Python Web Basics at SoftUni", "MAY 2023 - JUN 2023", "https://softuni.bg/certificates/details/177835/4657f045"),
+            ("Python Web Framework at SoftUni", "JUN 2023 - AUG 2023", "https://softuni.bg/certificates/details/182365/619a7290"),
+            ("HTML & CSS at SoftUni", "JAN 2023 - FEB 2023", "https://softuni.bg/certificates/details/163183/5a08c061"),
+            ("ReactJS at SoftUni", "OCT 2023 - DEC 2023", "https://softuni.bg/certificates/details/197959/a9d12e96"),
+            ("Foundational C# with Microsoft at Microsoft at freecodecamp", "DEC 2023 - DEC 2023", "https://www.freecodecamp.org/certification/dpashev/foundational-c-sharp-with-microsoft"),
         ]
         for course, date, link in courses:
             st.write(f"- **{course}** ({date}) [Certificate]({link})")
@@ -579,18 +581,26 @@ class PortfolioUI:
 def main() -> None:
     """Main function to run the portfolio website."""
     ui = PortfolioUI()
-    
+
     # Initialize page
     ui.setup_page()
-    
+
+    # Apply vibrant CSS
+    st.markdown(get_custom_css(), unsafe_allow_html=True)
+
+    # Render navigation bar
+    ui.render_navigation()
+
     # Render main content sections
     ui.home()
     ui.skills()
     ui.projects()
     ui.experience()
     ui.education()
+    ui.github()
     ui.courses()
     ui.render_contact_form()
+
 
 if __name__ == "__main__":
     main()

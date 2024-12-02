@@ -1,39 +1,33 @@
 def get_custom_css():
     return """
 <style>
-    /* CSS Variables for consistent theming */
     :root {
         --bg-primary: #0d1117;
         --bg-secondary: #161b22;
-        --accent-primary: #FF5733;  /* Vibrant orange */
-        --accent-secondary: #10B981; /* Professional emerald green */
-        --gradient-start: #FF5733;   /* Orange */
-        --gradient-mid: #10B981;     /* Green */
-        --gradient-end: #0EA5E9;     /* Blue */
-        --success-color: #059669;
-        --text-primary: #F9FAFB;
-        --text-secondary: #9CA3AF;
-        --border-color: #1F2937;
+        --accent-primary: #00ff7f;  /* Vibrant green */
+        --accent-secondary: #ffa500; /* Vibrant orange */
+        --gradient-start: #00ff7f;
+        --gradient-mid: #ffa500;
+        --gradient-end: #00d4ff;
+        --text-primary: #f9fafb;
+        --text-secondary: #9ca3af;
+        --border-color: #1f2937;
     }
 
-    /* Enable smooth scrolling */
     html {
         scroll-behavior: smooth;
     }
 
-    /* Main content container */
     .main .block-container {
         padding-top: 4rem;
         max-width: 1200px;
         margin: 0 auto;
     }
 
-    /* Section anchors positioning */
     [id] {
         scroll-margin-top: 4rem;
     }
 
-    /* Hide default sidebar */
     section[data-testid="stSidebar"] {
         display: none;
     }
@@ -58,11 +52,16 @@ def get_custom_css():
         align-items: center;
         gap: 1rem;
         padding: 0.5rem;
-        background: rgba(31, 41, 55, 0.4);
+        background: rgba(31, 41, 55, 0.8);
         backdrop-filter: blur(8px);
         border-radius: 8px;
         margin: 0.5rem auto;
         max-width: fit-content;
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
     }
 
     /* Navigation links */
@@ -75,14 +74,18 @@ def get_custom_css():
         font-weight: 500;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         gap: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .nav-link svg {
+        width: 1.5em;
+        height: 1.5em;
     }
 
     .nav-link:hover {
-        background: linear-gradient(90deg, 
-            rgba(var(--gradient-start), 0.1),
-            rgba(var(--gradient-mid), 0.1)
-        );
+        background: linear-gradient(90deg, rgba(var(--gradient-start), 0.1), rgba(var(--gradient-mid), 0.1));
         color: var(--gradient-start);
         transform: translateY(-1px);
     }
@@ -256,14 +259,13 @@ def get_custom_css():
 
     /* Enhanced links */
     a {
-        color: var(--gradient-start);
+        color: var(--accent-primary);
         text-decoration: none;
         transition: all 0.2s ease;
     }
     
     a:hover {
-        color: var(--gradient-mid);
-        text-decoration: none;
+        color: var(--accent-secondary);
     }
 
     /* Refined sidebar navigation */
