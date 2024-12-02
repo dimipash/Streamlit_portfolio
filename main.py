@@ -247,6 +247,7 @@ class PortfolioUI:
     @staticmethod
     def render_contact_form() -> None:
         """Render an interactive contact form."""
+        st.markdown("<div id='contact'></div>", unsafe_allow_html=True)
         st.header("📫 Contact Me")
         
         with st.form("contact_form"):

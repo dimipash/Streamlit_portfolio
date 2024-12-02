@@ -16,6 +16,23 @@ def get_custom_css():
         --border-color: #1F2937;
     }
 
+    /* Enable smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Main content container */
+    .main .block-container {
+        padding-top: 4rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Section anchors positioning */
+    [id] {
+        scroll-margin-top: 4rem;
+    }
+
     /* Hide default sidebar */
     section[data-testid="stSidebar"] {
         display: none;
@@ -56,6 +73,9 @@ def get_custom_css():
         border-radius: 6px;
         transition: all 0.2s ease;
         font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     .nav-link:hover {
@@ -64,6 +84,7 @@ def get_custom_css():
             rgba(var(--gradient-mid), 0.1)
         );
         color: var(--gradient-start);
+        transform: translateY(-1px);
     }
 
     .nav-link.active {
