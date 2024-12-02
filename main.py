@@ -7,10 +7,8 @@ import os
 from dataclasses import dataclass
 from typing import List, Dict, Union
 import streamlit as st
-# import plotly.graph_objects as go
 from datetime import datetime
 import pandas as pd
-# import plotly.express as px
 from PIL import Image
 import requests
 import json
