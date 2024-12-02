@@ -1,96 +1,268 @@
 def get_custom_css():
     return """
 <style>
-    /* Main page */
+    /* CSS Variables for consistent theming */
+    :root {
+        --bg-primary: #0d1117;
+        --bg-secondary: #161b22;
+        --accent-primary: #FF5733;  /* Vibrant orange */
+        --accent-secondary: #10B981; /* Professional emerald green */
+        --gradient-start: #FF5733;   /* Orange */
+        --gradient-mid: #10B981;     /* Green */
+        --gradient-end: #0EA5E9;     /* Blue */
+        --success-color: #059669;
+        --text-primary: #F9FAFB;
+        --text-secondary: #9CA3AF;
+        --border-color: #1F2937;
+    }
+
+    /* Hide default sidebar */
+    section[data-testid="stSidebar"] {
+        display: none;
+    }
+
+    /* Top Navigation Menu */
+    .stApp > header {
+        background: linear-gradient(90deg, var(--bg-primary), var(--bg-secondary));
+        border-bottom: 1px solid var(--border-color);
+        padding: 0.5rem 1rem;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        height: 3rem;
+    }
+
+    /* Navigation container */
+    .nav-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        padding: 0.5rem;
+        background: rgba(31, 41, 55, 0.4);
+        backdrop-filter: blur(8px);
+        border-radius: 8px;
+        margin: 0.5rem auto;
+        max-width: fit-content;
+    }
+
+    /* Navigation links */
+    .nav-link {
+        color: var(--text-primary);
+        text-decoration: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        font-weight: 500;
+    }
+
+    .nav-link:hover {
+        background: linear-gradient(90deg, 
+            rgba(var(--gradient-start), 0.1),
+            rgba(var(--gradient-mid), 0.1)
+        );
+        color: var(--gradient-start);
+    }
+
+    .nav-link.active {
+        background: linear-gradient(90deg, var(--gradient-start), var(--gradient-mid));
+        color: white;
+    }
+
+    /* Adjust main content area */
+    .main .block-container {
+        padding-top: 4rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* Main page with enhanced gradient */
     .main {
-        background-color: #0d1117; /* Dark background for the whole page */
-        color: #c9d1d9; /* Light text color */
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+        background: linear-gradient(145deg, var(--bg-primary), var(--bg-secondary));
+        color: var(--text-primary);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        line-height: 1.6;
     }
     
-    /* Headings */
-    h1, h2, h3 {
-        color: #58a6ff; /* Light blue for headings */
-        font-weight: 600;
+    /* Professional typography with gradient */
+    h1 {
+        background: linear-gradient(90deg, var(--gradient-start), var(--gradient-mid), var(--gradient-end));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
     }
     
-    /* Responsive adjustments */
-    @media (max-width: 1024px) {
-        .stApp .stColumn {
-            flex-direction: column;
-        }
+    h2 {
+        background: linear-gradient(90deg, var(--gradient-start), var(--gradient-mid));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.3;
+        margin-top: 2rem;
     }
     
-    /* Sidebar */
+    h3 {
+        color: var(--text-primary);
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        line-height: 1.3;
+        margin-top: 2rem;
+    }
     
-    
-    /* Buttons */
+    /* Modern, clean buttons with gradient */
     .stButton>button {
-        background-color: #238636; /* Green button color */
+        background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid));
         color: white;
         border: none;
-        border-radius: 5px;
-        padding: 0.5rem 1rem;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-    }
-    .stButton>button:hover {
-        background-color: #2ea043; /* Darker green on hover */
-    }
-    
-    /* Progress bars */
-    .stProgress .st-bo {
-        background-color: #58a6ff; /* Light blue for progress bars */
-    }
-    
-    /* Cards */
-    .project-card {
-        background-color: #161b22; /* Dark background for cards */
-        color: #c9d1d9; /* Light text color */
-        border-radius: 10px;
-        padding: 1rem;
-        margin-bottom: 1rem;
-        border: 1px solid #30363d; /* Dark border */
-        box-shadow: 0 1px 3px rgba(27,31,35,0.12), 0 1px 2px rgba(27,31,35,0.24);
-    }
-    
-    /* Expander */
-    .streamlit-expanderHeader {
-        background-color: #0d1117;
-        color: #c9d1d9;
+        border-radius: 6px;
+        padding: 0.75rem 1.5rem;
+        font-size: 15px;
         font-weight: 600;
-    }
-    .streamlit-expanderContent {
-        background-color: #161b22;
-        color: #c9d1d9;
-    }
-    
-    /* Links */
-    a {
-        font-size: 20px;
-        font-weight: bold;
-        color: #58a6ff;
-        text-decoration: none;
-        transition: color 0.3s ease;
-    }
-    a:hover {
-        color: #0ADD08; /* Lighter blue on hover */
+        letter-spacing: 0.025em;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     }
     
-    /* Form inputs */
+    .stButton>button:hover {
+        background: linear-gradient(135deg, var(--gradient-mid), var(--gradient-start));
+        transform: translateY(-1px);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    /* Professional progress bars with gradient */
+    .stProgress > div > div > div > div {
+        background: linear-gradient(90deg, var(--gradient-start), var(--gradient-mid));
+        transition: width 0.3s ease-in-out;
+    }
+    
+    /* Elegant cards with gradient hover effect */
+    .project-card {
+        background: rgba(31, 41, 55, 0.4);
+        backdrop-filter: blur(8px);
+        color: var(--text-primary);
+        border-radius: 12px;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .project-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(145deg, 
+            rgba(31, 41, 55, 0.4),
+            rgba(var(--gradient-start), 0.1)
+        );
+        border-color: var(--gradient-start);
+    }
+    
+    /* Clean, professional expander with gradient hover */
+    .streamlit-expanderHeader {
+        background-color: rgba(31, 41, 55, 0.4);
+        color: var(--text-primary);
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 1rem;
+        transition: all 0.2s ease;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .streamlit-expanderHeader:hover {
+        background: linear-gradient(145deg, 
+            rgba(31, 41, 55, 0.6),
+            rgba(var(--gradient-start), 0.1)
+        );
+        border-color: var(--gradient-start);
+    }
+
+    /* Refined scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: var(--bg-secondary);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(var(--gradient-start), var(--gradient-mid));
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(var(--gradient-mid), var(--gradient-start));
+    }
+
+    /* Refined inputs with gradient focus */
     .stTextInput>div>div>input {
-        background-color: #0d1117;
-        color: #c9d1d9;
-        border: 1px solid #30363d;
-        border-radius: 5px;
-        padding: 0.5rem;
+        background-color: rgba(31, 41, 55, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
     }
+    
+    .stTextInput>div>div>input:focus {
+        border-color: var(--gradient-start);
+        box-shadow: 0 0 0 2px rgba(255, 87, 51, 0.2);
+    }
+
+    /* Refined text area */
     .stTextArea>div>div>textarea {
-        background-color: #0d1117;
-        color: #c9d1d9;
-        border: 1px solid #30363d;
-        border-radius: 5px;
-        padding: 0.5rem;
+        background-color: rgba(31, 41, 55, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text-primary);
+        border-radius: 6px;
+        padding: 0.75rem 1rem;
+        transition: all 0.2s ease;
+    }
+    
+    .stTextArea>div>div>textarea:focus {
+        border-color: var(--gradient-start);
+        box-shadow: 0 0 0 2px rgba(255, 87, 51, 0.2);
+    }
+
+    /* Enhanced links */
+    a {
+        color: var(--gradient-start);
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+    
+    a:hover {
+        color: var(--gradient-mid);
+        text-decoration: none;
+    }
+
+    /* Refined sidebar navigation */
+    .css-1d391kg .streamlit-button {
+        width: 100%;
+        text-align: left;
+        padding: 0.5rem 1rem;
+        margin: 0.25rem 0;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        transition: all 0.2s ease;
+    }
+    
+    .css-1d391kg .streamlit-button:hover {
+        background: linear-gradient(90deg, 
+            rgba(var(--gradient-start), 0.1),
+            transparent
+        );
+        color: var(--gradient-start);
     }
 </style>
 """
