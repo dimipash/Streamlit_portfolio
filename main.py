@@ -465,11 +465,12 @@ class PortfolioUI:
         
         education_data = [
             {
-                "degree": "Python Web Development",
+                "degree": "Python Web Developer",
                 "school": "SoftUni",
                 "date": "2023 - 2024",
                 "details": [
                     "Python OOP",
+                    "Python Advanced",
                     "Python Web Basics (Django)",
                     "Python Web Framework (Django Advanced)",
                     "HTML & CSS",
@@ -478,14 +479,25 @@ class PortfolioUI:
                 ],
             },
             {
-                "degree": "Python Advanced",
-                "school": "SoftUni",
-                "date": "2023",
+                "degree": "Economics of Defense and Security",
+                "school": "University Of National And World Economy",
+                "date": "SEP 2006 - JUN 2010",
+                "location": "Sofia",
                 "details": [
-                    "Python Advanced",
-                    "Python OOP",
+                    "Economics of Defense and Security",
+                ],
+                
+            },
+            {
+                "degree": "Mathematics with English",
+                "school": "Gymnasium of Natural Sciences and Mathematics",
+                "location": "Sliven",
+                "date": "SEP 2001 - MAY 2006",
+                "details": [
+                    "Mathematics with English",
                 ],
             },
+            
         ]
         
         for edu in education_data:
@@ -547,6 +559,23 @@ class PortfolioUI:
                 st.error(f"Response content: {e.response.text}")
             st.error("Please check your internet connection and try again later.")
 
+    @staticmethod
+    def courses() -> None:
+        """Render courses section."""
+        st.markdown("<div id='courses'></div>", unsafe_allow_html=True)
+        st.title("Courses")
+        courses = [
+            ("Python OOP at SoftUni", "OCT 2022 - DEC 2022", "LINK_FOR_CERTIFICATE_1"),
+            ("Algorithms with Python at SoftUni", "JUL 2023 - AUG 2023", "LINK_FOR_CERTIFICATE_2"),
+            ("Python Web Basics at SoftUni", "MAY 2023 - JUN 2023", "LINK_FOR_CERTIFICATE_3"),
+            ("Python Web Framework at SoftUni", "JUN 2023 - AUG 2023", "LINK_FOR_CERTIFICATE_4"),
+            ("HTML & CSS at SoftUni", "JAN 2023 - FEB 2023", "LINK_FOR_CERTIFICATE_5"),
+            ("ReactJS at SoftUni", "OCT 2023 - DEC 2023", "LINK_FOR_CERTIFICATE_6"),
+            ("Foundational C# with Microsoft at Microsoft", "DEC 2023 - DEC 2023", "LINK_FOR_CERTIFICATE_7"),
+        ]
+        for course, date, link in courses:
+            st.write(f"- **{course}** ({date}) [Certificate]({link})")
+
 def main() -> None:
     """Main function to run the portfolio website."""
     ui = PortfolioUI()
@@ -560,6 +589,7 @@ def main() -> None:
     ui.projects()
     ui.experience()
     ui.education()
+    ui.courses()
     ui.render_contact_form()
 
 if __name__ == "__main__":
