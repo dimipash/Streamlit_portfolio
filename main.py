@@ -274,6 +274,10 @@ class PortfolioUI:
                 if config.send_email(subject, formatted_message, email):
                     st.success("Thank you for your message! I'll get back to you soon.")
                     Analytics.track_contact_submission()
+                    st.session_state.name = ""
+                    st.session_state.email = ""
+                    st.session_state.subject = ""
+                    st.session_state.message = ""
 
     @staticmethod
     def render_project_metrics(project_name: str, metrics: Dict[str, Union[int, float, str]]) -> None:
