@@ -1,27 +1,32 @@
 """
 Portfolio Website built with Streamlit.
 Author: Dimitar Pashev
+
+This module implements a personal portfolio website using Streamlit framework.
+It includes sections for skills, projects, contact information, and chat support.
 """
 
 import os
 from dataclasses import dataclass
-from typing import List, Dict, Union
+from typing import List, Dict, Union, Optional
 import streamlit as st
 from datetime import datetime
 import pandas as pd
 from PIL import Image
 import requests
 import json
-from styles import get_custom_css
-import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import smtplib
 from dotenv import load_dotenv
 
-# Type definitions
-SkillsDict = Dict[str, int]
+from styles import get_custom_css
+
+# Type aliases for better code readability
+SkillsDict = Dict[str, Dict[str, Union[int, str, float]]]
 ProjectDict = Dict[str, str]
 JobDict = Dict[str, Union[str, List[str]]]
+MetricsDict = Dict[str, Dict[str, Union[int, float, str]]]
 
 @dataclass
 class Config:
@@ -33,8 +38,13 @@ class Config:
     CONTACT_EMAIL: str = "dim.pashev@gmail.com"
 
     @staticmethod
-    def load_email_config():
-        """Load email configuration from environment variables."""
+    def load_email_config() -> Dict[str, Union[str, int]]:
+        """
+        Load email configuration from environment variables.
+
+        Returns:
+            Dict[str, Union[str, int]]: Email configuration settings
+        """
         load_dotenv()
         return {
             'host': os.getenv('EMAIL_HOST', 'smtp.gmail.com'),
@@ -45,7 +55,17 @@ class Config:
 
     @staticmethod
     def send_email(subject: str, body: str, from_email: str) -> bool:
-        """Send email using SMTP configuration."""
+        """
+        Send email using SMTP configuration.
+
+        Args:
+            subject (str): Email subject
+            body (str): Email body content
+            from_email (str): Sender's email address
+
+        Returns:
+            bool: True if email sent successfully, False otherwise
+        """
         try:
             email_config = Config.load_email_config()
             
@@ -58,11 +78,12 @@ class Config:
             msg['To'] = Config.CONTACT_EMAIL
             msg['Subject'] = f"Portfolio Contact: {subject}"
 
-            # Add sender's email to the body
-            full_body = f"From: {from_email}\n\n{body}"
+            full_body = f"""
+            From: {from_email}\n\n{body}
+            """
+            
             msg.attach(MIMEText(full_body, 'plain'))
 
-            # Create SMTP session
             with smtplib.SMTP(email_config['host'], email_config['port']) as server:
                 server.starttls()
                 server.login(email_config['username'], email_config['password'])
@@ -73,15 +94,17 @@ class Config:
             st.error(f"Failed to send email: {str(e)}")
             return False
 
-# Initialize configuration
-config = Config()
-
 class Analytics:
     """Analytics tracking for portfolio interactions."""
     
     @staticmethod
     def track_project_view(project_name: str) -> None:
-        """Track when a project is viewed."""
+        """
+        Track when a project is viewed.
+
+        Args:
+            project_name (str): Name of the viewed project
+        """
         if 'project_views' not in st.session_state:
             st.session_state.project_views = {}
         
@@ -100,8 +123,13 @@ class PortfolioData:
     """Data container for portfolio content."""
     
     @staticmethod
-    def get_skills_data() -> Dict[str, Dict[str, Union[int, str]]]:
-        """Returns technical skills with proficiency levels and categories."""
+    def get_skills_data() -> SkillsDict:
+        """
+        Returns technical skills with proficiency levels and categories.
+
+        Returns:
+            SkillsDict: Dictionary of skills with their details
+        """
         return {
             "Python": {"proficiency": 90, "category": "Languages", "experience_years": 2},
             "Django": {"proficiency": 85, "category": "Frameworks", "experience_years": 1.5},
@@ -118,8 +146,13 @@ class PortfolioData:
         }
     
     @staticmethod
-    def get_project_metrics() -> Dict[str, Dict[str, Union[int, float, str]]]:
-        """Returns project metrics and statistics."""
+    def get_project_metrics() -> MetricsDict:
+        """
+        Returns project metrics and statistics.
+
+        Returns:
+            MetricsDict: Dictionary of project metrics
+        """
         return {
             "Online Shop": {
                 "code_coverage": 85,
@@ -146,7 +179,12 @@ class PortfolioData:
     
     @staticmethod
     def get_soft_skills() -> List[str]:
-        """Returns list of soft skills."""
+        """
+        Returns list of soft skills.
+
+        Returns:
+            List[str]: List of soft skills
+        """
         return [
             "Communication",
             "Team Player",
@@ -157,7 +195,12 @@ class PortfolioData:
     
     @staticmethod
     def get_projects_data() -> List[ProjectDict]:
-        """Returns list of project information."""
+        """
+        Returns list of project information.
+
+        Returns:
+            List[ProjectDict]: List of project dictionaries
+        """
         return [
             {
                 "name": "Online Shop Django Project",
@@ -201,12 +244,26 @@ class PortfolioUI:
     """UI components and layout for the portfolio website."""
     
     def __init__(self):
+        """Initialize PortfolioUI instance."""
         self.config = Config()
 
-    @staticmethod
-    def render_skills_section(skills_data: Dict[str, Dict[str, Union[int, str]]]) -> None:
-        """Render skills in a clean, organized format."""
-        # Group skills by category
+    def setup_page(self) -> None:
+        """Configure initial page settings."""
+        st.set_page_config(
+            page_title=Config.PAGE_TITLE,
+            page_icon="🚀",
+            layout="wide",
+            initial_sidebar_state="expanded"
+        )
+        st.markdown(get_custom_css(), unsafe_allow_html=True)
+
+    def render_skills_section(self, skills_data: SkillsDict) -> None:
+        """
+        Render skills in a clean, organized format.
+
+        Args:
+            skills_data (SkillsDict): Dictionary of skills with their details
+        """
         skills_by_category = {}
         for skill, data in skills_data.items():
             category = data["category"]
@@ -214,7 +271,6 @@ class PortfolioUI:
                 skills_by_category[category] = []
             skills_by_category[category].append((skill, data["proficiency"]))
 
-        # Display skills by category
         for category, skills in skills_by_category.items():
             st.subheader(f"🔹 {category}")
             skill_chunks = [skills[i:i + 3] for i in range(0, len(skills), 3)]
@@ -225,20 +281,16 @@ class PortfolioUI:
                         st.markdown(f"<div style='text-align: center;'><strong>{skill}</strong></div>", unsafe_allow_html=True)
                         st.progress(proficiency / 100)
 
-    @staticmethod
-    def skills() -> None:
+    def skills(self) -> None:
         """Render skills section."""
         st.markdown("<div id='skills'></div>", unsafe_allow_html=True)
         st.title("Skills 🛠️")
         
-        # Get skills data
         skills_data = PortfolioData.get_skills_data()
         
-        # Render technical skills
         st.header("Technical Skills")
-        PortfolioUI.render_skills_section(skills_data)
+        self.render_skills_section(skills_data)
         
-        # Render soft skills
         st.header("Soft Skills")
         soft_skills = PortfolioData.get_soft_skills()
         cols = st.columns(3)
@@ -246,8 +298,7 @@ class PortfolioUI:
             with cols[i % 3]:
                 st.markdown(f"✨ {skill}")
 
-    @staticmethod
-    def render_contact_form() -> None:
+    def render_contact_form(self) -> None:
         """Render an interactive contact form."""
         st.markdown("<div id='contact'></div>", unsafe_allow_html=True)
         st.header("📫 Contact Me")
@@ -275,7 +326,7 @@ class PortfolioUI:
                 {message}
                 """
                 
-                if config.send_email(subject, formatted_message, email):
+                if Config.send_email(subject, formatted_message, email):
                     st.success("Thank you for your message! I'll get back to you soon.")
                     Analytics.track_contact_submission()
                     st.session_state.name = ""
@@ -283,9 +334,14 @@ class PortfolioUI:
                     st.session_state.subject = ""
                     st.session_state.message = ""
 
-    @staticmethod
-    def render_project_metrics(project_name: str, metrics: Dict[str, Union[int, float, str]]) -> None:
-        """Render metrics for a project."""
+    def render_project_metrics(self, project_name: str, metrics: Dict[str, Union[int, float, str]]) -> None:
+        """
+        Render metrics for a project.
+
+        Args:
+            project_name (str): Name of the project
+            metrics (Dict[str, Union[int, float, str]]): Project metrics
+        """
         cols = st.columns(4)
         with cols[0]:
             st.metric("Code Coverage", f"{metrics['code_coverage']}%")
@@ -296,13 +352,11 @@ class PortfolioUI:
         with cols[3]:
             st.metric("Status", metrics['status'])
 
-    @staticmethod
-    def projects() -> None:
+    def projects(self) -> None:
         """Render projects section with enhanced interactivity."""
         st.markdown("<div id='projects'></div>", unsafe_allow_html=True)
         st.title("Personal Projects")
         
-        # Filter projects
         tech_filter = st.multiselect(
             "Filter by Technology",
             ["Python", "Django", "React", "JavaScript", "PostgreSQL"]
@@ -313,16 +367,13 @@ class PortfolioUI:
                 with st.expander(f"{project['name']} ({project['date']})"):
                     Analytics.track_project_view(project['name'])
                     
-                    # Project description
                     st.markdown(project["description"])
                     
-                    # Tech stack badges
                     if 'tech_stack' in project:
                         st.write("**Technologies Used:**")
                         for tech in project['tech_stack']:
                             st.markdown(f"![{tech}](https://img.shields.io/badge/-{tech}-10B981?style=flat-square)")
                     
-                    # Links
                     col1, col2 = st.columns(2)
                     with col1:
                         if project.get('live_demo'):
@@ -331,45 +382,42 @@ class PortfolioUI:
                         if project.get('github_link'):
                             st.markdown(f"[💻 Source Code]({project['github_link']})")
                     
-                    # Project metrics
                     metrics = PortfolioData.get_project_metrics().get(project['name'].split()[0], None)
                     if metrics:
                         st.write("**Project Metrics:**")
-                        PortfolioUI.render_project_metrics(project['name'], metrics)
+                        self.render_project_metrics(project['name'], metrics)
 
-    @staticmethod
-    def render_navigation() -> None:
+    def render_navigation(self) -> None:
         """Render top navigation menu."""
+        # Navigation links
+        menu_items = [
+            ("Home", "home", "🏠", self.home),
+            ("Skills", "skills", "🛠️", self.skills),
+            ("Projects", "projects", "💼", self.projects),
+            ("Experience", "experience", "🚀", self.experience),
+            ("Education", "education", "📚", self.education),
+            ("Courses", "courses", "🎓", self.courses),
+            ("GitHub", "github", "🔗", self.github),
+            ("Contact", "contact", "📫", self.render_contact_form)
+        ]
+
+        nav_html = "".join([
+            f'<a href="#{link}" class="nav-link">{icon} <span>{name}</span></a>'
+            for name, link, icon, _ in menu_items
+        ])
+
         st.markdown(
-            """
+            f"""
             <div class="nav-container">
-                <a href="#home" class="nav-link">🏠 <span>Home</span></a>
-                <a href="#skills" class="nav-link">🛠️ <span>Skills</span></a>
-                <a href="#projects" class="nav-link">💼 <span>Projects</span></a>
-                <a href="#experience" class="nav-link">🚀 <span>Experience</span></a>
-                <a href="#education" class="nav-link">📚 <span>Education</span></a>
-                <a href="#github" class="nav-link">🔗 <span>GitHub</span></a>
-                <a href="#courses" class="nav-link">🎓 <span>Courses</span></a>
-                <a href="#contact" class="nav-link">📫 <span>Contact</span></a>
+                {nav_html}
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    @staticmethod
-    def setup_page() -> None:
-        """Configure initial page settings."""
-        st.set_page_config(
-            page_title=config.PAGE_TITLE,
-            page_icon="🚀",
-            layout="wide",
-            initial_sidebar_state="collapsed"
-        )
-
-    @staticmethod
-    def download_resume() -> None:
+    def download_resume(self) -> None:
         """Add resume download button."""
-        with open(config.RESUME_PATH, "rb") as file:
+        with open(Config.RESUME_PATH, "rb") as file:
             st.download_button(
                 label="Download Resume",
                 data=file,
@@ -377,15 +425,14 @@ class PortfolioUI:
                 mime="application/pdf",
             )
 
-    @staticmethod
-    def home() -> None:
+    def home(self) -> None:
         """Render home section."""
         st.markdown("<div id='home'></div>", unsafe_allow_html=True)
         col1, col2 = st.columns([1, 2])
         
         with col1:
-            if os.path.exists(config.PROFILE_IMAGE):
-                image = Image.open(config.PROFILE_IMAGE)
+            if os.path.exists(Config.PROFILE_IMAGE):
+                image = Image.open(Config.PROFILE_IMAGE)
                 st.image(image, width=250)
             else:
                 st.error("Profile picture not found. Please add 'photo.jpeg' to the project root.")
@@ -398,7 +445,7 @@ class PortfolioUI:
                 "Links: [GitHub](https://github.com/dimipash) | "
                 "[LinkedIn](https://www.linkedin.com/in/dimitar-pashev-994174274/)"
             )
-            PortfolioUI.download_resume()
+            self.download_resume()
 
         st.markdown("---")
         st.header("Professional Summary")
@@ -411,8 +458,7 @@ class PortfolioUI:
             """
         )
 
-    @staticmethod
-    def experience() -> None:
+    def experience(self) -> None:
         """Render experience section."""
         st.markdown("<div id='experience'></div>", unsafe_allow_html=True)
         st.title("Employment History")
@@ -460,8 +506,7 @@ class PortfolioUI:
                 for responsibility in job["responsibilities"]:
                     st.write(f"- {responsibility}")
 
-    @staticmethod
-    def education() -> None:
+    def education(self) -> None:
         """Render education section."""
         st.markdown("<div id='education'></div>", unsafe_allow_html=True)
         st.title("Education")
@@ -544,8 +589,6 @@ class PortfolioUI:
                     if homepage:
                         st.write(f"**Live Version:** [{homepage}]({homepage})")
                     st.write(f"**Languages:** {', '.join(languages) if languages else 'Not specified'}")
-                    # st.write(f"**Stars:** {repo['stargazers_count']}")
-                    # st.write(f"**Forks:** {repo['forks_count']}")
                     last_updated = datetime.strptime(
                         repo["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
                     )
@@ -561,8 +604,7 @@ class PortfolioUI:
                 st.error(f"Response content: {e.response.text}")
             st.error("Please check your internet connection and try again later.")
 
-    @staticmethod
-    def courses() -> None:
+    def courses(self) -> None:
         """Render courses section."""
         st.markdown("<div id='courses'></div>", unsafe_allow_html=True)
         st.title("Courses")
@@ -585,22 +627,22 @@ def main() -> None:
     # Initialize page
     ui.setup_page()
 
-    # Apply vibrant CSS
-    st.markdown(get_custom_css(), unsafe_allow_html=True)
+    # Create two columns: main content 
+    main_content = st.container()
 
-    # Render navigation bar
-    ui.render_navigation()
+    with main_content:
+        # Render navigation bar
+        ui.render_navigation()
 
-    # Render main content sections
-    ui.home()
-    ui.skills()
-    ui.projects()
-    ui.experience()
-    ui.education()
-    ui.github()
-    ui.courses()
-    ui.render_contact_form()
-
+        # Render main content sections
+        ui.home()
+        ui.skills()
+        ui.projects()
+        ui.experience()
+        ui.education()
+        ui.github()
+        ui.courses()
+        ui.render_contact_form()
 
 if __name__ == "__main__":
     main()
