@@ -12,248 +12,204 @@ def get_custom_css() -> str:
     """
     return """
 <style>
-    /* CSS Variables for Theme Configuration
-    ---------------------------------------- */
+    /* Modern Theme Configuration */
     :root {
-        /* Professional Blues */
-        --blue-darker: #0a1525;
-        --blue-dark: #152238;
-        --blue-medium: #1e3253;
-        --blue-light: #2c4c7c;
-        
         /* Vivid Accents */
         --accent-green: #00ff7f;
         --accent-orange: #ff7f00;
         
-        /* Base Colors */
-        --bg-primary: var(--blue-darker);
-        --bg-secondary: var(--blue-dark);
+        /* Professional Colors */
+        --bg-primary: #000000;
+        --bg-secondary: #111111;
+        --bg-tertiary: #1a1a1a;
         --text-primary: #ffffff;
         --text-secondary: #b0c4de;
-        --border-color: rgba(255, 255, 255, 0.1);
-        
-        /* Gradients */
-        --gradient-blue: linear-gradient(135deg, var(--blue-dark), var(--blue-light));
-        --gradient-accent: linear-gradient(90deg, var(--accent-green), var(--accent-orange));
-        --gradient-hover: linear-gradient(90deg, var(--accent-orange), var(--accent-green));
-        
-        /* Shadows */
-        --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
-        --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-        --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+        --border-color: rgba(0, 255, 127, 0.2);
         
         /* Spacing */
-        --spacing-xs: 0.5rem;
-        --spacing-sm: 1rem;
-        --spacing-md: 2rem;
-        --spacing-lg: 3rem;
+        --spacing-xs: 0.25rem;
+        --spacing-sm: 0.5rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 2rem;
         --spacing-xl: 4rem;
-        
-        /* Border Radius */
-        --radius-sm: 0.25rem;
-        --radius-md: 0.5rem;
-        --radius-lg: 1rem;
-        
-        /* Transitions */
-        --transition-fast: 0.2s ease;
-        --transition-normal: 0.3s ease;
     }
 
-    /* Base Styles
-    ---------------------------------------- */
-    html {
-        scroll-behavior: smooth;
-        background: var(--bg-primary);
+    /* Global Styles */
+    .stApp {
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: 'Inter', sans-serif;
+        margin-top: 0;
+        padding-top: 0;
     }
 
     .main .block-container {
-        padding-top: var(--spacing-xl) !important;
-        max-width: 1200px;
-        margin: 0 auto;
+        padding-top: 4rem !important;
+        margin-top: 0;
     }
 
-    [id] {
-        scroll-margin-top: var(--spacing-xl);
-    }
-
-    /* Hide Streamlit Default Elements
-    ---------------------------------------- */
-    .stDeployButton,
-    header[data-testid="stHeader"],
-    section[data-testid="stSidebar"] {
-        display: none !important;
-    }
-
-    /* Navigation
-    ---------------------------------------- */
+    /* Navigation */
     .nav-container {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
-        background: var(--blue-darker);
-        padding: var(--spacing-sm);
-        z-index: 9999;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.9);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem;
         border-bottom: 1px solid var(--border-color);
-        box-shadow: var(--shadow-md);
     }
 
     .navigation {
         display: flex;
         justify-content: center;
-        align-items: center;
-        gap: var(--spacing-sm);
-        padding: var(--spacing-xs) var(--spacing-md);
-        background: var(--blue-dark);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-sm);
-        max-width: 1200px;
+        gap: 1rem;
+        max-width: 1400px;
         margin: 0 auto;
     }
 
     .nav-link {
-        color: var(--text-primary);
+        color: var(--text-secondary);
         text-decoration: none;
-        padding: var(--spacing-xs) var(--spacing-sm);
-        border-radius: var(--radius-md);
-        transition: var(--transition-normal);
+        padding: 0.4rem 0.8rem;
+        border-radius: 6px;
+        transition: all 0.3s ease;
         font-size: 0.9rem;
         font-weight: 500;
         letter-spacing: 0.5px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .nav-link::before {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 2px;
-        background: var(--gradient-accent);
-        transform: scaleX(0);
-        transform-origin: right;
-        transition: transform var(--transition-normal);
-    }
-
-    .nav-link:hover::before {
-        transform: scaleX(1);
-        transform-origin: left;
     }
 
     .nav-link:hover {
         color: var(--accent-green);
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 255, 127, 0.15);
+        transform: translateY(-1px);
     }
 
-    /* Chat Section
-    ---------------------------------------- */
-    .chat-section {
-        margin: var(--spacing-lg) 0;
-        padding: var(--spacing-md);
-        background: var(--blue-medium);
-        border-radius: var(--radius-md);
+    /* Section Containers */
+    .home-section,
+    .skills-section,
+    .projects-section,
+    .experience-section,
+    .education-section,
+    .github-section,
+    .courses-section,
+    .contact-section {
+        max-width: 1400px;
+        margin: var(--spacing-xl) auto;
+        padding: var(--spacing-lg);
+        background: var(--bg-secondary);
+        border-radius: 12px;
         border: 1px solid var(--border-color);
-        box-shadow: var(--shadow-lg);
     }
 
-    .chat-section h1 {
-        background: var(--gradient-accent);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: bold;
-    }
-
-    /* Footer
-    ---------------------------------------- */
-    .footer {
-        position: relative;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        padding: var(--spacing-md);
-        background: var(--blue-dark);
-        border-top: 1px solid var(--border-color);
-        text-align: center;
-        color: var(--text-secondary);
-        margin-top: var(--spacing-lg);
-    }
-
-    .footer a {
-        color: var(--accent-green);
-        text-decoration: none;
-        margin: 0 var(--spacing-xs);
-        transition: var(--transition-normal);
-        font-weight: 500;
-    }
-
-    .footer a:hover {
-        color: var(--accent-orange);
-    }
-
-    /* Typography
-    ---------------------------------------- */
+    /* Typography */
     h1, h2, h3, h4, h5, h6 {
         color: var(--text-primary);
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: var(--spacing-md);
+        background: linear-gradient(45deg, var(--accent-green), var(--accent-orange));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     h1 {
-        background: var(--gradient-accent);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: bold;
-        letter-spacing: -0.02em;
+        font-size: 2.5rem;
+        font-weight: 700;
     }
 
     h2 {
-        color: var(--blue-light);
-        font-weight: bold;
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
     }
 
     p {
-        color: var(--text-secondary);
+        font-size: 1.1rem;
         line-height: 1.6;
-        margin-bottom: var(--spacing-sm);
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-md);
     }
 
-    /* Animations
-    ---------------------------------------- */
-    @keyframes glow {
-        0% { box-shadow: var(--shadow-sm); }
-        50% { box-shadow: var(--shadow-md); }
-        100% { box-shadow: var(--shadow-sm); }
+    /* Links */
+    a {
+        color: var(--accent-green) !important;
+        text-decoration: none !important;
+        transition: color 0.2s ease !important;
     }
 
-    .nav-container {
-        animation: glow 4s infinite;
+    a:hover {
+        color: var(--accent-orange) !important;
     }
 
-    /* Responsive Design
-    ---------------------------------------- */
-    @media (max-width: 768px) {
-        .navigation {
-            padding: var(--spacing-xs);
-            gap: var(--spacing-xs);
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+    /* Input Fields */
+    .stTextInput > div > div > input {
+        background: var(--bg-tertiary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 4px !important;
+        color: var(--text-primary) !important;
+        transition: all 0.2s ease !important;
+    }
 
-        .nav-link {
-            font-size: 0.8rem;
-            padding: var(--spacing-xs);
-        }
+    .stTextInput > div > div > input:focus {
+        border-color: var(--accent-green) !important;
+        box-shadow: 0 0 0 1px var(--accent-green) !important;
+    }
 
-        .nav-link::before {
-            display: none;
-        }
+    /* Tables */
+    .stTable {
+        background: var(--bg-secondary) !important;
+        border-radius: 8px !important;
+        overflow: hidden !important;
+    }
 
-        .chat-section,
-        .footer {
-            padding: var(--spacing-sm);
-            margin: var(--spacing-sm) 0;
-        }
+    .stTable th {
+        background: var(--bg-tertiary) !important;
+        color: var(--accent-green) !important;
+    }
+
+    /* Code Blocks */
+    .stCodeBlock {
+        background: var(--bg-tertiary) !important;
+        border: 1px solid var(--border-color) !important;
+        border-radius: 8px !important;
+    }
+
+    /* Metrics and KPIs */
+    .metric-container {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        margin: 1rem 0;
+    }
+
+    .metric-value {
+        font-size: 2.5rem;
+        font-weight: 600;
+        color: var(--accent-green);
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        padding: var(--spacing-lg);
+        margin-top: var(--spacing-xl);
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .block-container > div {
+        animation: fadeIn 0.5s ease forwards;
     }
 </style>
 """
