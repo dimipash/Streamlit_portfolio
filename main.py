@@ -9,8 +9,8 @@ It includes sections for skills, projects, contact information, and chat support
 import os
 from dataclasses import dataclass
 from typing import List, Dict, Union, Optional
-import streamlit as st
 from datetime import datetime
+import streamlit as st
 import pandas as pd
 from PIL import Image
 import requests
@@ -19,6 +19,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
 from dotenv import load_dotenv
+from openai import OpenAI
 
 from styles import get_custom_css
 
@@ -250,10 +251,9 @@ class PortfolioUI:
     def setup_page(self) -> None:
         """Configure initial page settings."""
         st.set_page_config(
-            page_title=Config.PAGE_TITLE,
-            page_icon="🚀",
+            page_title=self.config.PAGE_TITLE,
             layout="wide",
-            initial_sidebar_state="expanded"
+            initial_sidebar_state="collapsed"
         )
         st.markdown(get_custom_css(), unsafe_allow_html=True)
 
@@ -389,30 +389,30 @@ class PortfolioUI:
 
     def render_navigation(self) -> None:
         """Render top navigation menu."""
-        # Navigation links
         menu_items = [
             ("Home", "home", "🏠", self.home),
             ("Skills", "skills", "🛠️", self.skills),
             ("Projects", "projects", "💼", self.projects),
             ("Experience", "experience", "🚀", self.experience),
             ("Education", "education", "📚", self.education),
-            ("Courses", "courses", "🎓", self.courses),
             ("GitHub", "github", "🔗", self.github),
-            ("Contact", "contact", "📫", self.render_contact_form)
+            ("Courses", "courses", "🎓", self.courses),
+            ("Contact", "contact", "📫", self.render_contact_form),
+            ("Chat", "chat", "💬", self.chat)
         ]
 
         nav_html = "".join([
-            f'<a href="#{link}" class="nav-link">{icon} <span>{name}</span></a>'
+            f'<a href="#{link}" class="nav-link">{icon} {name}</a>'
             for name, link, icon, _ in menu_items
         ])
 
         st.markdown(
-            f"""
+            f'''
             <div class="nav-container">
-                {nav_html}
+                <div class="navigation">{nav_html}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
+            ''',
+            unsafe_allow_html=True
         )
 
     def download_resume(self) -> None:
@@ -620,29 +620,101 @@ class PortfolioUI:
         for course, date, link in courses:
             st.write(f"- **{course}** ({date}) [Certificate]({link})")
 
+    def chat(self) -> None:
+        """Render AI chat assistant section."""
+        st.markdown('<div class="chat-section">', unsafe_allow_html=True)
+        st.title("AI Chat Assistant")
+        st.markdown("Chat with an AI assistant powered by GPT-3.5")
+        
+        # Check if API key is configured
+        api_key = st.secrets.get("OPENAI_API_KEY", "")
+        
+        if not api_key:
+            st.error("OpenAI API key not configured. Please add your API key to .streamlit/secrets.toml")
+            st.markdown("""
+            To set up the chat feature:
+            1. Get your API key from [OpenAI](https://platform.openai.com/api-keys)
+            2. Add it to `.streamlit/secrets.toml`:
+            ```toml
+            OPENAI_API_KEY = "your-api-key-here"
+            ```
+            """)
+            return
+            
+        client = OpenAI(api_key=api_key)
+
+        if "openai_model" not in st.session_state:
+            st.session_state["openai_model"] = "gpt-3.5-turbo"
+
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
+
+        # Display chat history
+        for message in st.session_state.messages:
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
+
+        # Chat input and response
+        if prompt := st.chat_input("Chat with AI Assistant - Ask me anything about Dimitar's portfolio..."):
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
+            with st.chat_message("assistant"):
+                try:
+                    stream = client.chat.completions.create(
+                        model=st.session_state["openai_model"],
+                        messages=[
+                            {"role": m["role"], "content": m["content"]}
+                            for m in st.session_state.messages
+                        ],
+                        stream=True,
+                    )
+                    response = st.write_stream(stream)
+                    st.session_state.messages.append({"role": "assistant", "content": response})
+                except Exception as e:
+                    st.error(f"Error: {str(e)}")
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    def footer(self) -> None:
+        """Render footer section."""
+        st.markdown("""
+        <div class="footer">
+            <p> 2024 Dimitar Pashev. All rights reserved.</p>
+            <p>Built with ❤️ using Streamlit and OpenAI</p>
+            <p>
+                <a href="https://github.com/dimipash" target="_blank">GitHub</a> • 
+                <a href="https://www.linkedin.com/in/dimitar-pashev-994174274/" target="_blank">LinkedIn</a>
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+
 def main() -> None:
     """Main function to run the portfolio website."""
     ui = PortfolioUI()
-
-    # Initialize page
     ui.setup_page()
+    
+    # Fixed navigation at the top
+    ui.render_navigation()
 
-    # Create two columns: main content 
-    main_content = st.container()
+    # Main content sections
+    ui.home()
+    ui.skills()
+    ui.projects()
+    ui.experience()
+    ui.education()
+    ui.github()
+    ui.courses()
+    ui.render_contact_form()
+    
+    # Chat section before footer
+    ui.chat()
+    
+    # Footer at the bottom
+    ui.footer()
 
-    with main_content:
-        # Render navigation bar
-        ui.render_navigation()
-
-        # Render main content sections
-        ui.home()
-        ui.skills()
-        ui.projects()
-        ui.experience()
-        ui.education()
-        ui.github()
-        ui.courses()
-        ui.render_contact_form()
 
 if __name__ == "__main__":
     main()
