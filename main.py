@@ -663,58 +663,52 @@ class PortfolioUI:
             # Initialize Groq client without unnecessary arguments
             client = Groq(api_key=api_key)
             
-            # Create containers for chat interface
-            chat_container = st.container()
-            input_container = st.container()
+            # Display chat history first
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
 
-            # Display chat history
-            with chat_container:
-                for message in st.session_state.messages:
-                    with st.chat_message(message["role"]):
-                        st.markdown(message["content"])
+            # Handle user input below chat history
+            if prompt := st.chat_input("Ask me anything about Dimitar's portfolio...", key="chat_input"):
+                # Add user message
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                
+                # Display user message
+                with st.chat_message("user"):
+                    st.markdown(prompt)
 
-            # Handle user input
-            with input_container:
-                if prompt := st.chat_input("Ask me anything about Dimitar's portfolio...", key="chat_input"):
-                    # Add user message
-                    st.session_state.messages.append({"role": "user", "content": prompt})
+                # Generate AI response
+                with st.chat_message("assistant"):
+                    message_placeholder = st.empty()
+                    full_response = ""
                     
-                    with chat_container:
-                        with st.chat_message("user"):
-                            st.markdown(prompt)
+                    try:
+                        completion = client.chat.completions.create(
+                            model=st.session_state["default_model"],
+                            messages=st.session_state.messages,
+                            temperature=0.7,
+                            max_tokens=1024,
+                            top_p=1,
+                            stream=True,
+                            stop=None
+                        )
 
-                        # Generate AI response
-                        with st.chat_message("assistant"):
-                            message_placeholder = st.empty()
-                            full_response = ""
-                            
-                            try:
-                                completion = client.chat.completions.create(
-                                    model=st.session_state["default_model"],
-                                    messages=st.session_state.messages,
-                                    temperature=0.7,
-                                    max_tokens=1024,
-                                    top_p=1,
-                                    stream=True,
-                                    stop=None
-                                )
+                        # Process streaming response
+                        for chunk in completion:
+                            if chunk.choices[0].delta.content is not None:
+                                full_response += chunk.choices[0].delta.content
+                                message_placeholder.markdown(full_response + "▌")
+                        
+                        message_placeholder.markdown(full_response)
+                        
+                        # Add response to chat history
+                        st.session_state.messages.append(
+                            {"role": "assistant", "content": full_response}
+                        )
 
-                                # Process streaming response
-                                for chunk in completion:
-                                    if chunk.choices[0].delta.content is not None:
-                                        full_response += chunk.choices[0].delta.content
-                                        message_placeholder.markdown(full_response + "▌")
-                                
-                                message_placeholder.markdown(full_response)
-                                
-                                # Add response to chat history
-                                st.session_state.messages.append(
-                                    {"role": "assistant", "content": full_response}
-                                )
-
-                            except Exception as e:
-                                st.error(f"Error generating response: {str(e)}")
-                                return
+                    except Exception as e:
+                        st.error(f"Error generating response: {str(e)}")
+                        return
 
         except Exception as e:
             st.error(f"Failed to initialize chat: {str(e)}")
