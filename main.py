@@ -20,6 +20,15 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 from dotenv import load_dotenv
 from styles import get_custom_css
+from groq import Groq
+from streamlit.components.v1 import html
+
+# Set page configuration at the very beginning
+st.set_page_config(
+    page_title="Dimitar Pashev - Portfolio",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 
 # Type aliases for better code readability
 SkillsDict = Dict[str, Dict[str, Union[int, str, float]]]
@@ -248,11 +257,6 @@ class PortfolioUI:
 
     def setup_page(self) -> None:
         """Configure initial page settings."""
-        st.set_page_config(
-            page_title=self.config.PAGE_TITLE,
-            layout="wide",
-            initial_sidebar_state="collapsed"
-        )
         st.markdown(get_custom_css(), unsafe_allow_html=True)
 
     def render_skills_section(self, skills_data: SkillsDict) -> None:
@@ -396,6 +400,7 @@ class PortfolioUI:
             ("GitHub", "github", "🔗", self.github),
             ("Courses", "courses", "🎓", self.courses),
             ("Contact", "contact", "📫", self.render_contact_form),
+            ("Chat", "chat", "💬", self.chat),
         ]
 
         nav_html = "".join([
@@ -617,6 +622,89 @@ class PortfolioUI:
         for course, date, link in courses:
             st.write(f"- **{course}** ({date}) [Certificate]({link})")
 
+    def chat(self) -> None:
+        """
+        Render chat section powered by Groq.
+        Implements a streaming chat interface with history management.
+        """
+        # Section markup and title
+        st.markdown("<div id='chat' class='chat-section'></div>", unsafe_allow_html=True)
+        st.title("💬 Chat with AI Assistant")
+        st.markdown("Ask me anything about Dimitar's experience, skills, or projects!")
+
+        # Initialize Groq client
+        client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+
+        # Initialize session state
+        if "messages" not in st.session_state:
+            st.session_state.messages = []
+        if "default_model" not in st.session_state:
+            st.session_state["default_model"] = "llama-3.3-70b-versatile"
+
+        # Create a container for the entire chat interface
+        chat_container = st.container()
+        
+        # Create a container for the input at the bottom
+        input_container = st.container()
+
+        # Display chat history in the main container
+        with chat_container:
+            for message in st.session_state.messages:
+                with st.chat_message(message["role"]):
+                    st.write(message["content"])
+
+        # Handle user input in the bottom container
+        with input_container:
+            if prompt := st.chat_input("Ask me anything...", key="chat_input"):
+                # Add user message to history
+                st.session_state.messages.append({"role": "user", "content": prompt})
+                
+                # Update chat history with user message
+                with chat_container:
+                    with st.chat_message("user"):
+                        st.markdown(prompt)
+
+                    # Generate and display AI response
+                    with st.chat_message("assistant"):
+                        response_placeholder = st.empty()
+                        try:
+                            completion = client.chat.completions.create(
+                                model=st.session_state["default_model"],
+                                messages=st.session_state.messages,
+                                temperature=1,
+                                max_tokens=1024,
+                                top_p=1,
+                                stream=True,
+                                stop=None
+                            )
+
+                            # Process streaming response
+                            full_response = ""
+                            for chunk in completion:
+                                chunk_content = chunk.choices[0].delta.content or ""
+                                full_response += chunk_content
+                                response_placeholder.markdown(full_response + "▌")
+                            
+                            # Update final response
+                            response_placeholder.markdown(full_response)
+                            st.session_state.messages.append(
+                                {"role": "assistant", "content": full_response}
+                            )
+
+                        except Exception as e:
+                            st.error(f"Error generating response: {str(e)}")
+
+        # Add auto-scroll behavior
+        if st.session_state.messages:
+            st.markdown("""
+                <script>
+                    var chatDiv = document.getElementById('chat');
+                    if (chatDiv) {
+                        chatDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+                    }
+                </script>
+                """, unsafe_allow_html=True)
+
     def footer(self) -> None:
         """Render footer section."""
         st.markdown("""
@@ -630,15 +718,42 @@ class PortfolioUI:
         </div>
         """, unsafe_allow_html=True)
 
+# Function to create the fixed navigation bar
+def create_navbar():
+    """Create responsive navigation bar with all section links."""
+    nav_items = [
+        ("🏠 Home", "home"),
+        ("🛠️ Skills", "skills"),
+        ("💼 Projects", "projects"),
+        ("🚀 Experience", "experience"),
+        ("📚 Education", "education"),
+        ("🔗 GitHub", "github"),
+        ("🎓 Courses", "courses"),
+        ("📫 Contact", "contact"),
+        ("💬 Chat", "chat")
+    ]
+    
+    nav_links = "\n".join([
+        f'<a href="#{section}" class="nav-link">{label}</a>'
+        for label, section in nav_items
+    ])
+    
+    st.markdown(f"""
+    <nav class="nav-container">
+        <div class="navigation">
+            {nav_links}
+        </div>
+    </nav>
+    """, unsafe_allow_html=True)
 
-def main() -> None:
-    """Main function to run the portfolio website."""
+
+
+# Main function to render the page
+def main():
+    create_navbar()
     ui = PortfolioUI()
     ui.setup_page()
     
-    # Fixed navigation at the top
-    ui.render_navigation()
-
     # Main content sections
     ui.home()
     ui.skills()
@@ -648,10 +763,20 @@ def main() -> None:
     ui.github()
     ui.courses()
     ui.render_contact_form()
+    ui.chat()
     
     # Footer at the bottom
     ui.footer()
+   
 
+# Ensure smooth scrolling behavior
+st.markdown("""
+<style>
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 if __name__ == "__main__":
     main()
