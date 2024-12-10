@@ -660,7 +660,7 @@ class PortfolioUI:
             return
 
         try:
-            # Initialize Groq client
+            # Initialize Groq client without unnecessary arguments
             client = Groq(api_key=api_key)
             
             # Create containers for chat interface
