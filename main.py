@@ -624,16 +624,23 @@ class PortfolioUI:
 
     def chat(self) -> None:
         """
-        Render chat section powered by Groq.
+        Render chat section powered by Groq LLM.
         Implements a streaming chat interface with history management.
         """
         # Section markup and title
         st.markdown("<div id='chat' class='chat-section'></div>", unsafe_allow_html=True)
         st.title("💬 Chat with AI Assistant")
-        st.markdown("Ask me anything about Dimitar's experience, skills, or projects!")
-
-        # Initialize Groq client
-        client = Groq(api_key=os.getenv('GROQ_API_KEY'))
+        
+        # Add informative description
+        st.markdown("""
+        I'm powered by **Llama 3.3 70B**, a state-of-the-art language model. Feel free to:
+        - Ask about Dimitar's skills and experience
+        - Get details about specific projects
+        - Learn more about his technical expertise
+        - Discuss potential collaboration opportunities
+        
+        *Your chat history will be preserved during this session.*
+        """)
 
         # Initialize session state
         if "messages" not in st.session_state:
@@ -641,69 +648,94 @@ class PortfolioUI:
         if "default_model" not in st.session_state:
             st.session_state["default_model"] = "llama-3.3-70b-versatile"
 
-        # Create a container for the entire chat interface
-        chat_container = st.container()
-        
-        # Create a container for the input at the bottom
-        input_container = st.container()
+        # Check for API key
+        try:
+            api_key = st.secrets["GROQ_API_KEY"]
+        except KeyError:
+            st.error("""
+            Groq API key not found. Please configure it in your Streamlit secrets.
+            1. Go to your Streamlit app settings
+            2. Add GROQ_API_KEY to your secrets
+            """)
+            return
 
-        # Display chat history in the main container
-        with chat_container:
-            for message in st.session_state.messages:
-                with st.chat_message(message["role"]):
-                    st.write(message["content"])
+        try:
+            # Initialize Groq client
+            client = Groq(api_key=api_key)
+            
+            # Create containers for chat interface
+            chat_container = st.container()
+            input_container = st.container()
 
-        # Handle user input in the bottom container
-        with input_container:
-            if prompt := st.chat_input("Ask me anything...", key="chat_input"):
-                # Add user message to history
-                st.session_state.messages.append({"role": "user", "content": prompt})
-                
-                # Update chat history with user message
-                with chat_container:
-                    with st.chat_message("user"):
-                        st.markdown(prompt)
+            # Display chat history
+            with chat_container:
+                for message in st.session_state.messages:
+                    with st.chat_message(message["role"]):
+                        st.markdown(message["content"])
 
-                    # Generate and display AI response
-                    with st.chat_message("assistant"):
-                        response_placeholder = st.empty()
-                        try:
-                            completion = client.chat.completions.create(
-                                model=st.session_state["default_model"],
-                                messages=st.session_state.messages,
-                                temperature=1,
-                                max_tokens=1024,
-                                top_p=1,
-                                stream=True,
-                                stop=None
-                            )
+            # Handle user input
+            with input_container:
+                if prompt := st.chat_input("Ask me anything about Dimitar's portfolio...", key="chat_input"):
+                    # Add user message
+                    st.session_state.messages.append({"role": "user", "content": prompt})
+                    
+                    with chat_container:
+                        with st.chat_message("user"):
+                            st.markdown(prompt)
 
-                            # Process streaming response
+                        # Generate AI response
+                        with st.chat_message("assistant"):
+                            message_placeholder = st.empty()
                             full_response = ""
-                            for chunk in completion:
-                                chunk_content = chunk.choices[0].delta.content or ""
-                                full_response += chunk_content
-                                response_placeholder.markdown(full_response + "▌")
                             
-                            # Update final response
-                            response_placeholder.markdown(full_response)
-                            st.session_state.messages.append(
-                                {"role": "assistant", "content": full_response}
-                            )
+                            try:
+                                completion = client.chat.completions.create(
+                                    model=st.session_state["default_model"],
+                                    messages=st.session_state.messages,
+                                    temperature=0.7,
+                                    max_tokens=1024,
+                                    top_p=1,
+                                    stream=True,
+                                    stop=None
+                                )
 
-                        except Exception as e:
-                            st.error(f"Error generating response: {str(e)}")
+                                # Process streaming response
+                                for chunk in completion:
+                                    if chunk.choices[0].delta.content is not None:
+                                        full_response += chunk.choices[0].delta.content
+                                        message_placeholder.markdown(full_response + "▌")
+                                
+                                message_placeholder.markdown(full_response)
+                                
+                                # Add response to chat history
+                                st.session_state.messages.append(
+                                    {"role": "assistant", "content": full_response}
+                                )
 
-        # Add auto-scroll behavior
-        if st.session_state.messages:
-            st.markdown("""
-                <script>
-                    var chatDiv = document.getElementById('chat');
-                    if (chatDiv) {
-                        chatDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
-                    }
-                </script>
-                """, unsafe_allow_html=True)
+                            except Exception as e:
+                                st.error(f"Error generating response: {str(e)}")
+                                return
+
+        except Exception as e:
+            st.error(f"Failed to initialize chat: {str(e)}")
+            return
+
+        # Add chat interface styling
+        st.markdown("""
+            <style>
+            .chat-section {
+                padding: 20px;
+                border-radius: 10px;
+                background-color: rgba(255, 255, 255, 0.05);
+                margin-bottom: 20px;
+            }
+            .stChatMessage {
+                padding: 10px;
+                border-radius: 15px;
+                margin: 5px 0;
+            }
+            </style>
+        """, unsafe_allow_html=True)
 
     def footer(self) -> None:
         """Render footer section."""
