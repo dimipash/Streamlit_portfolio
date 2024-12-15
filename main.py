@@ -11,7 +11,6 @@ from dataclasses import dataclass
 from typing import List, Dict, Union, Optional
 from datetime import datetime
 import streamlit as st
-import pandas as pd
 from PIL import Image
 import requests
 import json
@@ -20,7 +19,6 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 from dotenv import load_dotenv
 from styles import get_custom_css
-from groq import Groq
 from streamlit.components.v1 import html
 
 # Set page configuration at the very beginning
@@ -778,7 +776,6 @@ def main():
     ui.github()
     ui.courses()
     ui.render_contact_form()
-    # ui.chat()  # Removed chat section
     # Footer at the bottom
     ui.footer()
 

@@ -84,68 +84,13 @@ def get_custom_css() -> str:
     /* Main Content Spacing */
     .main-content {
         margin-top: 80px;  /* Space for fixed navbar */
-        margin-bottom: 500px;  /* Space for chat */
         padding: 20px;
-    }
-
-    /* Fixed Chat Container */
-    .chat-container {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 450px;
-        background-color: var(--bg-secondary);
-        z-index: 999;
-        border-top: 1px solid var(--border-color);
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .chat-header {
-        padding: 10px;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 10px;
-        color: var(--text-primary);
-    }
-
-    .chat-messages {
-        flex-grow: 1;
-        overflow-y: auto;
-        padding: 10px;
-        background-color: var(--bg-tertiary);
-        color: var(--text-secondary);
-    }
-
-    .chat-input {
-        padding: 10px;
-        border-top: 1px solid var(--border-color);
-        background-color: var(--bg-tertiary);
-    }
-
-    .chat-input input {
-        width: 100%;
-        padding: var(--spacing-sm);
-        border: 1px solid var(--border-color);
-        border-radius: 4px;
-        background-color: var(--bg-primary);
-        color: var(--text-primary);
     }
 
     /* Responsive Design */
     @media (max-width: 768px) {
         .nav-container {
             padding: 0.5rem;
-        }
-        
-        .chat-container {
-            height: 350px;
-        }
-        
-        .main-content {
-            margin-bottom: 400px;
         }
     }
 
