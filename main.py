@@ -20,7 +20,6 @@ import smtplib
 from dotenv import load_dotenv
 from styles import get_custom_css
 from streamlit.components.v1 import html
-from chat import Chatbot
 from data import PortfolioData
 
 # Set page configuration at the very beginning
@@ -129,8 +128,6 @@ class Analytics:
         if "contact_submissions" not in st.session_state:
             st.session_state.contact_submissions = 0
         st.session_state.contact_submissions += 1
-
-
 
 
 class PortfolioUI:
@@ -417,7 +414,7 @@ class PortfolioUI:
                 "responsibilities": [
                     "Collected debts from customers",
                     "Provided phone support to customers",
-                ],                
+                ],
             },
             {
                 "title": "Security Guard",
@@ -427,7 +424,7 @@ class PortfolioUI:
                 "responsibilities": [
                     "Collected debts from customers",
                     "Provided phone support to customers",
-                ],                
+                ],
             },
         ]
 
@@ -580,7 +577,6 @@ class PortfolioUI:
         for course, date, link in courses:
             st.write(f"- **{course}** ({date}) [Certificate]({link})")
 
-
     def footer(self) -> None:
         """Render footer section."""
         st.markdown(
@@ -648,9 +644,6 @@ def main():
     ui.render_contact_form()
     # Footer at the bottom
     ui.footer()
-    
-    chatbot = Chatbot()
-    chatbot.display_chat()
 
 
 # Ensure smooth scrolling behavior
