@@ -302,7 +302,7 @@ class PortfolioUI:
 
         nav_html = "".join(
             [
-                f'<a href="#{link}" class="nav-link">{icon} {name}</a>'
+                f'<a href="#{link}" class="nav-link" style="font-size: 18px;">{icon} {name}</a>'
                 for name, link, icon, _ in menu_items
             ]
         )
@@ -399,6 +399,35 @@ class PortfolioUI:
                     "Operated machinery to ensure smooth production flow",
                     "Collaborated with team to meet daily production targets",
                 ],
+            },
+            {
+                "title": "Production Worker",
+                "company": "Hall Hunter Partnership",
+                "location": "Chichester",
+                "date": "JAN 2014 - SEP 2014",
+                "responsibilities": [
+                    "Aggriculture and maintenance of farm equipment",
+                ],
+            },
+            {
+                "title": "Phone Agent Debt Collector",
+                "company": "Kronos Recovery Management",
+                "location": "Sofia",
+                "date": "SEP 2012 - DEC 2013",
+                "responsibilities": [
+                    "Collected debts from customers",
+                    "Provided phone support to customers",
+                ],                
+            },
+            {
+                "title": "Security Guard",
+                "company": "Bodu SOD",
+                "location": "Sofia",
+                "date": "SEP 2010 - SEP 2011",
+                "responsibilities": [
+                    "Collected debts from customers",
+                    "Provided phone support to customers",
+                ],                
             },
         ]
 
