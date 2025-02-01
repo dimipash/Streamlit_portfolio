@@ -340,7 +340,7 @@ class PortfolioUI:
         with col2:
             st.title("Dimitar Pashev")
             st.subheader("Junior Developer")
-            st.write("Burgas, Bulgaria | dim.pashev@gmail.com | 0876386033")
+            st.write("Bulgaria | dim.pashev@gmail.com | 0876386033")
             st.write(
                 "Links: [GitHub](https://github.com/dimipash) | "
                 "[LinkedIn](https://www.linkedin.com/in/dimitar-pashev-994174274/)"
