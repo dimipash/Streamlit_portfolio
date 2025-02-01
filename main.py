@@ -3,7 +3,7 @@ Portfolio Website built with Streamlit.
 Author: Dimitar Pashev
 
 This module implements a personal portfolio website using Streamlit framework.
-It includes sections for skills, projects, contact information, and chat support.
+It includes sections for skills, projects, contact information.
 """
 
 import os
@@ -582,7 +582,7 @@ class PortfolioUI:
         st.markdown(
             """
         <div class="footer">
-            <p> 2024 Dimitar Pashev. All rights reserved.</p>
+            <p> 2025 Dimitar Pashev. All rights reserved.</p>
             <p>Built with ❤️ using Streamlit</p>
             <p>
                 <a href="https://github.com/dimipash" target="_blank">GitHub</a> • 
@@ -641,8 +641,7 @@ def main():
     ui.education()
     ui.github()
     ui.courses()
-    ui.render_contact_form()
-    # Footer at the bottom
+    ui.render_contact_form()    
     ui.footer()
 
 
