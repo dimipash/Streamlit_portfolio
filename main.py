@@ -353,3 +353,10 @@ class PortfolioApp:
 if __name__ == "__main__":
     app = PortfolioApp()
     app.run()
+
+st.markdown(
+    """
+<iframe src="https://app.vectorshift.ai/chatbots/embedded/67d84b6f7e6f30aec4d9dd9c?openChatbot=true" width="300px" height="400px" style="border: none; position: fixed; bottom: 0; right: 0; margin: 10px;" allow="clipboard-read; clipboard-write; microphone"/>
+    """,
+    unsafe_allow_html=True
+)
