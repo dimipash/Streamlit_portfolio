@@ -6,11 +6,10 @@ Implements caching and session state management for analytics data.
 from typing import Dict, Optional
 from datetime import datetime
 import streamlit as st
-from functools import lru_cache
 
 
 class Analytics:
-    """Analytics tracking for portfolio interactions with caching."""
+    """Analytics tracking for portfolio interactions."""
 
     @staticmethod
     def _get_analytics_state() -> Dict:
@@ -30,36 +29,15 @@ class Analytics:
         return st.session_state.analytics
 
     @staticmethod
-    @lru_cache(maxsize=100)
-    def _get_cached_project_views(project_name: str) -> int:
-        """
-        Get cached view count for a project.
-
-        Args:
-            project_name (str): Name of the project
-
-        Returns:
-            int: Number of views for the project
-        """
-        analytics = Analytics._get_analytics_state()
-        return analytics['project_views'].get(project_name, 0)
-
-    @staticmethod
     def track_project_view(project_name: str) -> None:
         """
-        Track when a project is viewed with caching.
+        Track when a project is viewed.
 
         Args:
             project_name (str): Name of the viewed project
         """
         analytics = Analytics._get_analytics_state()
-        
-        if project_name not in analytics['project_views']:
-            analytics['project_views'][project_name] = 0
-        analytics['project_views'][project_name] += 1
-        
-        # Clear cache for this project
-        Analytics._get_cached_project_views.cache_clear()
+        analytics['project_views'][project_name] = analytics['project_views'].get(project_name, 0) + 1
 
     @staticmethod
     def track_contact_submission() -> None:
@@ -85,7 +63,8 @@ class Analytics:
         Returns:
             int: Number of views
         """
-        return Analytics._get_cached_project_views(project_name)
+        analytics = Analytics._get_analytics_state()
+        return analytics['project_views'].get(project_name, 0)
 
     @staticmethod
     def get_total_contact_submissions() -> int:

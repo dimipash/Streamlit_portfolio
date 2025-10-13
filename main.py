@@ -153,70 +153,7 @@ class PortfolioApp:
         st.markdown("<div id='experience'></div>", unsafe_allow_html=True)
         st.title("Employment History")
 
-        jobs = [
-            {
-                "title": "MPI Operator",
-                "company": "Bifrangi UK",
-                "location": "Lincoln, UK",
-                "date": "OCT 2017 - SEP 2024",
-                "responsibilities": [
-                    "Ensured quality control via MPI equipment operation",
-                    "Boosted product quality by maintaining defect detection rates",
-                    "Interpreted MPI results for process enhancements",
-                    "Collaborated for swift quality issue resolutions",
-                    "Implemented safety protocols, reducing workplace incidents",
-                ],
-            },
-            {
-                "title": "Production Operative",
-                "company": "Parkacre",
-                "location": "Lincoln",
-                "date": "APR 2017 - SEP 2017",
-                "responsibilities": [
-                    "Operated machinery to ensure smooth production flow",
-                    "Collaborated with team to meet daily production targets",
-                ],
-            },
-            {
-                "title": "Production Operative",
-                "company": "Moypark",
-                "location": "Lincoln",
-                "date": "JAN 2015 - MAR 2017",
-                "responsibilities": [
-                    "Operated machinery to ensure smooth production flow",
-                    "Collaborated with team to meet daily production targets",
-                ],
-            },
-            {
-                "title": "Production Worker",
-                "company": "Hall Hunter Partnership",
-                "location": "Chichester",
-                "date": "JAN 2014 - SEP 2014",
-                "responsibilities": [
-                    "Aggriculture and maintenance of farm equipment",
-                ],
-            },
-            {
-                "title": "Phone Agent Debt Collector",
-                "company": "Kronos Recovery Management",
-                "location": "Sofia",
-                "date": "SEP 2012 - DEC 2013",
-                "responsibilities": [
-                    "Collected debts from customers",
-                    "Provided phone support to customers",
-                ],
-            },
-            {
-                "title": "Security Guard",
-                "company": "Bodu SOD",
-                "location": "Sofia",
-                "date": "SEP 2010 - SEP 2011",
-                "responsibilities": [
-                    "Collected debts from customers",
-                    "Provided phone support to customers",
-                ],
-            },
-        ]
+        jobs = PortfolioData.get_experience_data()
 
         for job in jobs:
             with st.expander(f"{job['title']} at {job['company']} ({job['date']})"):
@@ -230,40 +167,7 @@ class PortfolioApp:
         st.markdown("<div id='education'></div>", unsafe_allow_html=True)
         st.title("Education")
 
-        education_data = [
-            {
-                "degree": "Python Web Developer",
-                "school": "SoftUni",
-                "date": "2022 - 2024",
-                "details": [
-                    "Python OOP",
-                    "Python Advanced",
-                    "Python Web Basics (Django)",
-                    "Python Web Framework (Django Advanced)",
-                    "HTML & CSS",
-                    "JavaScript Front-End",
-                    "ReactJS",
-                ],
-            },
-            {
-                "degree": "Economics of Defense and Security",
-                "school": "University Of National And World Economy",
-                "date": "SEP 2006 - JUN 2010",
-                "location": "Sofia",
-                "details": [
-                    "Economics of Defense and Security",
-                ],
-            },
-            {
-                "degree": "Mathematics with English",
-                "school": "Gymnasium of Natural Sciences and Mathematics",
-                "location": "Sliven",
-                "date": "SEP 2001 - MAY 2006",
-                "details": [
-                    "Mathematics with English",
-                ],
-            },
-        ]
+        education_data = PortfolioData.get_education_data()
 
         for edu in education_data:
             with st.expander(f"{edu['degree']} - {edu['school']} ({edu['date']})"):
@@ -279,48 +183,7 @@ class PortfolioApp:
         """Render courses section."""
         st.markdown("<div id='courses'></div>", unsafe_allow_html=True)
         st.title("Courses")
-        courses = [
-            (
-                "Data Analysis with Python",
-                "SEP 2025 - OCT 2025",
-                "https://www.freecodecamp.org/certification/dpashev/data-analysis-with-python-v7",
-            ),
-            (
-                "Python OOP at SoftUni",
-                "OCT 2022 - DEC 2022",
-                "https://softuni.bg/certificates/details/150462/c3e3696e",
-            ),
-            (
-                "Algorithms with Python at SoftUni",
-                "JUL 2023 - AUG 2023",
-                "https://softuni.bg/certificates/details/181201/864df479",
-            ),
-            (
-                "Python Web Basics at SoftUni",
-                "MAY 2023 - JUN 2023",
-                "https://softuni.bg/certificates/details/177835/4657f045",
-            ),
-            (
-                "Python Web Framework at SoftUni",
-                "JUN 2023 - AUG 2023",
-                "https://softuni.bg/certificates/details/182365/619a7290",
-            ),
-            (
-                "HTML & CSS at SoftUni",
-                "JAN 2023 - FEB 2023",
-                "https://softuni.bg/certificates/details/163183/5a08c061",
-            ),
-            (
-                "ReactJS at SoftUni",
-                "OCT 2023 - DEC 2023",
-                "https://softuni.bg/certificates/details/197959/a9d12e96",
-            ),
-            (
-                "Foundational C# with Microsoft at Microsoft at freecodecamp",
-                "DEC 2023 - DEC 2023",
-                "https://www.freecodecamp.org/certification/dpashev/foundational-c-sharp-with-microsoft",
-            ),
-        ]
+        courses = PortfolioData.get_courses_data()
         for course, date, link in courses:
             st.write(f"- **{course}** ({date}) [Certificate]({link})")
 
@@ -331,30 +194,21 @@ class PortfolioApp:
 
     def run(self) -> None:
         """Run the portfolio application with error handling."""
-        try:
-            self.create_navbar()
-            self.render_sections()
-            self.components.render_footer()
+        self.create_navbar()
+        self.render_sections()
+        self.components.render_footer()
 
-            # Add smooth scrolling behavior
-            st.markdown(
-                """
-                <style>
-                    html {
-                        scroll-behavior: smooth;
-                    }
-                </style>
-                """,
-                unsafe_allow_html=True,
-            )
-        except Exception as e:
-            logger.error(f"Application error: {str(e)}")
-            st.error(
-                """
-                An error occurred while running the application.
-                Please refresh the page or contact support if the issue persists.
-                """
-            )
+        # Add smooth scrolling behavior
+        st.markdown(
+            """
+            <style>
+                html {
+                    scroll-behavior: smooth;
+                }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
 
 
 if __name__ == "__main__":

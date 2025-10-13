@@ -101,28 +101,30 @@ class PortfolioComponents:
         Args:
             skills_data (Dict): Skills data with proficiency levels
         """
-        skills_by_category = {}
-        for skill, data in skills_data.items():
-            category = data["category"]
-            if category not in skills_by_category:
-                skills_by_category[category] = []
-            skills_by_category[category].append((skill, data["proficiency"]))
+        categories = sorted(list(set(skill["category"] for skill in skills_data.values())))
 
-        for category, skills in skills_by_category.items():
+        for category in categories:
             st.subheader(f"🔹 {category}")
-            skill_chunks = [skills[i:i + 3] for i in range(0, len(skills), 3)]
-            
+            skills_in_category = {
+                skill: data
+                for skill, data in skills_data.items()
+                if data["category"] == category
+            }
+            sorted_skills = sorted(
+                skills_in_category.items(), key=lambda item: item[1]["proficiency"], reverse=True
+            )
+
+            skill_chunks = [sorted_skills[i:i + 3] for i in range(0, len(sorted_skills), 3)]
+
             for chunk in skill_chunks:
                 cols = st.columns(len(chunk))
-                for i, (skill, proficiency) in enumerate(
-                    sorted(chunk, key=lambda x: x[1], reverse=True)
-                ):
+                for i, (skill, data) in enumerate(chunk):
                     with cols[i]:
                         st.markdown(
                             f"<div style='text-align: center;'><strong>{skill}</strong></div>",
                             unsafe_allow_html=True,
                         )
-                        st.progress(proficiency / 100)
+                        st.progress(data["proficiency"] / 100)
 
     @staticmethod
     def render_project_metrics(project_name: str, metrics: Dict[str, Union[int, float, str]]) -> None:
@@ -147,12 +149,15 @@ class PortfolioComponents:
         """Render projects section with filtering and metrics."""
         st.title("Personal Projects")
 
+        projects = PortfolioData.get_projects_data()
+        all_techs = sorted(list(set(tech for proj in projects for tech in proj.get("tech_stack", []))))
+
         tech_filter = st.multiselect(
             "Filter by Technology",
-            ["Python", "Django", "React", "JavaScript", "PostgreSQL"],
+            all_techs,
         )
 
-        for project in PortfolioData.get_projects_data():
+        for project in projects:
             if not tech_filter or any(
                 tech in project.get("tech_stack", []) for tech in tech_filter
             ):
@@ -249,11 +254,7 @@ class PortfolioComponents:
                 if Config.send_email(subject, formatted_message, email):
                     st.success("Thank you for your message! I'll get back to you soon.")
                     Analytics.track_contact_submission()
-                    # Clear form
-                    st.session_state.name = ""
-                    st.session_state.email = ""
-                    st.session_state.subject = ""
-                    st.session_state.message = ""
+                    st.experimental_rerun()
 
     @staticmethod
     def render_footer() -> None:

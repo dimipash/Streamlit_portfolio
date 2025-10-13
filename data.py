@@ -131,55 +131,52 @@ class PortfolioData:
         ]
 
     @staticmethod
-    def get_projects_data() -> List[ProjectDict]:
+    def get_courses_data() -> List[tuple[str, str, str]]:
         """
-        Returns list of project information.
+        Returns list of course information.
 
         Returns:
-            List[ProjectDict]: List of project dictionaries
+            List[tuple[str, str, str]]: List of course tuples
         """
         return [
-            {
-                "name": "Online Shop Django Project",
-                "date": "09/2024 - 10/2024",
-                "description": "A comprehensive Django-based online shopping platform with features like custom user models, product and category management, shopping cart, order processing, inventory control, user account management, and PayPal integration.",
-                "tech_stack": [
-                    "Python",
-                    "Django",
-                    "PostgreSQL",
-                    "JavaScript",
-                    "Bootstrap",
-                ],
-                "live_demo": "https://online-shop-django-project-production.up.railway.app/",
-                "github_link": "https://github.com/dimipash/ONLINE_SHOP_DJANGO_PROJECT",
-            },
-            {
-                "name": "SaaS Django Project",
-                "date": "05/2025 - 05/2025",
-                "description": "A foundational Software as a Service (SaaS) solution built with Django, featuring user authentication, subscription management, and custom commands.",
-                "tech_stack": ["Python", "Django", "PostgreSQL", "Docker"],
-                "live_demo": "https://saas-dlp.up.railway.app/",
-                "github_link": "https://github.com/dimipash/SAAS",
-            },
-            {
-                "name": "Python AI Projects",
-                "date": "2024 - Present",
-                "description": "A collection of small to medium-sized projects focused on exploring various applications of Artificial Intelligence (AI) using Python and related technologies. Projects include AI research agents, voice assistants, coding mentors, web scrapers, and more.",
-                "tech_stack": ["Python", "LangChain", "Flask", "Streamlit", "FastAPI", "MongoDB"],
-                "github_link": "https://github.com/dimipash/AI-PYTHON-PROJECTS",
-            },
-            {
-                "name": "AI Web Scraper",
-                "date": "08/2024 - 08/2024",
-                "description": "An intelligent web scraper that uses AI to extract data from websites. Built with Streamlit and Selenium.",
-                "tech_stack": ["Python", "Streamlit", "Selenium", "LLM"],
-                "github_link": "https://github.com/dimipash/AI_WEB_SCRAPER",
-            },
-            {
-                "name": "Llama3.1 Flask Chatbot",
-                "date": "08/2024 - 08/2024",
-                "description": "A chatbot powered by Llama3.1, built with Flask. The chatbot can engage in natural conversations and answer user queries.",
-                "tech_stack": ["Python", "Flask", "Llama3.1"],
-                "github_link": "https://github.com/dimipash/LLAMA3.1_FLASK_CHATBOT",
-            },
+            (
+                "Data Analysis with Python",
+                "SEP 2025 - OCT 2025",
+                "https://www.freecodecamp.org/certification/dpashev/data-analysis-with-python-v7",
+            ),
+            (
+                "Python OOP at SoftUni",
+                "OCT 2022 - DEC 2022",
+                "https://softuni.bg/certificates/details/150462/c3e3696e",
+            ),
+            (
+                "Algorithms with Python at SoftUni",
+                "JUL 2023 - AUG 2023",
+                "https://softuni.bg/certificates/details/181201/864df479",
+            ),
+            (
+                "Python Web Basics at SoftUni",
+                "MAY 2023 - JUN 2023",
+                "https://softuni.bg/certificates/details/177835/4657f045",
+            ),
+            (
+                "Python Web Framework at SoftUni",
+                "JUN 2023 - AUG 2023",
+                "https://softuni.bg/certificates/details/182365/619a7290",
+            ),
+            (
+                "HTML & CSS at SoftUni",
+                "JAN 2023 - FEB 2023",
+                "https://softuni.bg/certificates/details/163183/5a08c061",
+            ),
+            (
+                "ReactJS at SoftUni",
+                "OCT 2023 - DEC 2023",
+                "https://softuni.bg/certificates/details/197959/a9d12e96",
+            ),
+            (
+                "Foundational C# with Microsoft at Microsoft at freecodecamp",
+                "DEC 2023 - DEC 2023",
+                "https://www.freecodecamp.org/certification/dpashev/foundational-c-sharp-with-microsoft",
+            ),
         ]

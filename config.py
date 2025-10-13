@@ -11,6 +11,7 @@ from email.mime.multipart import MIMEMultipart
 import smtplib
 import streamlit as st
 from dotenv import load_dotenv
+from datetime import datetime
 
 
 @dataclass
@@ -25,6 +26,7 @@ class Config:
     EMAIL_RATE_LIMIT: int = 5  # Maximum emails per hour
 
     @staticmethod
+    @st.cache_data
     def load_email_config() -> Dict[str, Union[str, int]]:
         """
         Load email configuration from environment variables.
@@ -67,16 +69,11 @@ class Config:
         Raises:
             Exception: If email sending fails
         """
-        # Rate limiting check
-        hour = st.session_state.get('current_hour', 0)
-        current_hour = datetime.now().hour
-        
-        if hour != current_hour:
-            st.session_state.current_hour = current_hour
-            st.session_state.email_count = 0
-        
-        if st.session_state.get('email_count', 0) >= Config.EMAIL_RATE_LIMIT:
-            st.error("Email rate limit exceeded. Please try again later.")
+        last_email_time = st.session_state.get('last_email_time', 0)
+        current_time = datetime.now().timestamp()
+
+        if current_time - last_email_time < 60:  # 1 minute cooldown
+            st.error("Please wait a minute before sending another email.")
             return False
 
         try:
@@ -95,8 +92,7 @@ class Config:
                 server.login(email_config["username"], email_config["password"])
                 server.send_message(msg)
 
-            # Increment email counter
-            st.session_state.email_count = st.session_state.get('email_count', 0) + 1
+            st.session_state.last_email_time = current_time
             return True
 
         except Exception as e:
