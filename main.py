@@ -20,10 +20,10 @@ from styles import get_custom_css
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
+
 
 class PortfolioApp:
     """Main portfolio application class with error handling and performance optimizations."""
@@ -50,7 +50,7 @@ class PortfolioApp:
 
     def track_visit(self) -> None:
         """Track website visit if not already tracked in current session."""
-        if 'visit_tracked' not in st.session_state:
+        if "visit_tracked" not in st.session_state:
             Analytics.track_visit()
             st.session_state.visit_tracked = True
             logger.info("New visit tracked")
@@ -108,13 +108,15 @@ class PortfolioApp:
                 render_func()
             except Exception as e:
                 logger.error(f"Error rendering {section_name} section: {str(e)}")
-                st.error(f"Failed to load {section_name} section. Please refresh the page.")
+                st.error(
+                    f"Failed to load {section_name} section. Please refresh the page."
+                )
 
     def render_home(self) -> None:
         """Render home section."""
         st.markdown("<div id='home'></div>", unsafe_allow_html=True)
         self.components.render_profile_section()
-        
+
         st.markdown("---")
         st.header("Professional Summary")
         st.write(
@@ -130,10 +132,10 @@ class PortfolioApp:
         """Render skills section."""
         st.markdown("<div id='skills'></div>", unsafe_allow_html=True)
         st.title("Skills 🛠️")
-        
+
         st.header("Technical Skills")
         self.components.render_skills_section(PortfolioData.get_skills_data())
-        
+
         st.header("Soft Skills")
         soft_skills = PortfolioData.get_soft_skills()
         cols = st.columns(3)
@@ -279,6 +281,11 @@ class PortfolioApp:
         st.title("Courses")
         courses = [
             (
+                "Data Analysis with Python",
+                "SEP 2025 - OCT 2025",
+                "https://www.freecodecamp.org/certification/dpashev/data-analysis-with-python-v7",
+            ),
+            (
                 "Python OOP at SoftUni",
                 "OCT 2022 - DEC 2022",
                 "https://softuni.bg/certificates/details/150462/c3e3696e",
@@ -358,5 +365,5 @@ st.markdown(
     """
 <iframe src="https://app.vectorshift.ai/chatbots/embedded/67d84b6f7e6f30aec4d9dd9c?openChatbot=true" width="500px" height="500px" style="border: 1px solid var(--border-color); position: fixed; bottom: 0; right: 0; margin: 10px; z-index: 1000; background: transparent;" allow="clipboard-read; clipboard-write; microphone"/>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
