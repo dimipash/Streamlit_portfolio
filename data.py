@@ -91,12 +91,12 @@ class PortfolioData:
                 "complexity": "High",
                 "status": "Active",
             },
-            "Google News Clone": {
-                "code_coverage": 80,
-                "commits": 80,
-                "stars": 10,
-                "complexity": "Medium",
-                "status": "Completed",
+            "Python AI Projects": {
+                "code_coverage": 85,
+                "commits": 150,
+                "stars": 30,
+                "complexity": "High",
+                "status": "Active",
             },
             "AI Web Scraper": {
                 "code_coverage": 85,
@@ -162,11 +162,11 @@ class PortfolioData:
                 "github_link": "https://github.com/dimipash/SAAS",
             },
             {
-                "name": "Google News Clone",
-                "date": "05/2025 - 05/2025",
-                "description": "A clone of Google News built with React, utilizing Firebase for backend services and Tailwind CSS for styling.",
-                "tech_stack": ["React", "Firebase", "Tailwind CSS", "TypeScript"],
-                "github_link": "https://github.com/dimipash/GOOGLE-NEWS-CLONE-REACTJS",
+                "name": "Python AI Projects",
+                "date": "2024 - Present",
+                "description": "A collection of small to medium-sized projects focused on exploring various applications of Artificial Intelligence (AI) using Python and related technologies. Projects include AI research agents, voice assistants, coding mentors, web scrapers, and more.",
+                "tech_stack": ["Python", "LangChain", "Flask", "Streamlit", "FastAPI", "MongoDB"],
+                "github_link": "https://github.com/dimipash/AI-PYTHON-PROJECTS",
             },
             {
                 "name": "AI Web Scraper",
