@@ -3,17 +3,16 @@ UI components module for the portfolio website.
 Contains reusable UI components with caching and performance optimizations.
 """
 
-from typing import List, Dict, Union, Optional
 import os
 import re
+from datetime import datetime
+
+import requests
 import streamlit as st
 from PIL import Image
-import requests
-from datetime import datetime
-from functools import lru_cache
 
-from config import Config
 from analytics import Analytics
+from config import Config
 from data import PortfolioData
 
 
@@ -40,7 +39,7 @@ class PortfolioComponents:
 
     @staticmethod
     @st.cache_data(ttl=3600)  # Cache for 1 hour
-    def load_image(image_path: str) -> Optional[Image.Image]:
+    def load_image(image_path: str) -> Image.Image | None:
         """
         Load and cache image.
 
@@ -58,7 +57,7 @@ class PortfolioComponents:
 
     @staticmethod
     @st.cache_data(ttl=3600)
-    def fetch_github_data(username: str) -> Dict:
+    def fetch_github_data(username: str) -> dict:
         """
         Fetch and cache GitHub data with optional authentication.
 
@@ -116,7 +115,7 @@ class PortfolioComponents:
 
     @staticmethod
     def render_skills_section(
-        skills_data: Dict[str, Dict[str, Union[int, str, float]]],
+        skills_data: dict[str, dict[str, int | str | float]],
     ) -> None:
         """
         Render skills section with categories and proficiency bars.
@@ -148,9 +147,7 @@ class PortfolioComponents:
                         st.progress(proficiency / 100)
 
     @staticmethod
-    def render_project_metrics(
-        project_name: str, metrics: Dict[str, Union[int, float, str]]
-    ) -> None:
+    def render_project_metrics(project_name: str, metrics: dict[str, int | float | str]) -> None:
         """
         Render project metrics in columns.
 
@@ -220,13 +217,9 @@ class PortfolioComponents:
         repos.sort(key=lambda r: r["updated_at"], reverse=True)
         for repo in repos[:20]:  # Show latest 20 repos
             with st.expander(repo["name"]):
-                st.write(
-                    f"**Description:** {repo.get('description', 'No description available')}"
-                )
+                st.write(f"**Description:** {repo.get('description', 'No description available')}")
                 if repo.get("homepage"):
-                    st.write(
-                        f"**Live Version:** [{repo['homepage']}]({repo['homepage']})"
-                    )
+                    st.write(f"**Live Version:** [{repo['homepage']}]({repo['homepage']})")
 
                 # Fetch languages
                 languages_url = repo["languages_url"]
@@ -237,13 +230,9 @@ class PortfolioComponents:
                 except requests.exceptions.RequestException:
                     st.write("**Languages:** Unable to fetch languages")
 
-                last_updated = datetime.strptime(
-                    repo["updated_at"], "%Y-%m-%dT%H:%M:%SZ"
-                )
+                last_updated = datetime.strptime(repo["updated_at"], "%Y-%m-%dT%H:%M:%SZ")
                 st.write(f"**Last Updated:** {last_updated.strftime('%Y-%m-%d')}")
-                st.write(
-                    f"**Repository URL:** [{repo['html_url']}]({repo['html_url']})"
-                )
+                st.write(f"**Repository URL:** [{repo['html_url']}]({repo['html_url']})")
 
     @staticmethod
     def render_contact_form() -> None:

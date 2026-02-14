@@ -2,9 +2,7 @@
 Tests for main.py module.
 """
 
-import pytest
-from unittest.mock import patch, MagicMock
-import sys
+from unittest.mock import MagicMock, patch
 
 
 class TestPortfolioApp:
@@ -77,9 +75,7 @@ class TestPortfolioApp:
         mock_st.title = MagicMock()
         mock_st.header = MagicMock()
         mock_st.write = MagicMock()
-        mock_st.columns = MagicMock(
-            return_value=[MagicMock(), MagicMock(), MagicMock()]
-        )
+        mock_st.columns = MagicMock(return_value=[MagicMock(), MagicMock(), MagicMock()])
 
         from main import PortfolioApp
 

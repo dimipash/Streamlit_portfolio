@@ -4,12 +4,12 @@ Contains settings and environment configurations.
 """
 
 import os
-from typing import Dict, Union
+import smtplib
 from dataclasses import dataclass
 from datetime import datetime
-from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-import smtplib
+from email.mime.text import MIMEText
+
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -26,7 +26,7 @@ class Config:
     EMAIL_RATE_LIMIT: int = 5  # Maximum emails per hour
 
     @staticmethod
-    def load_email_config() -> Dict[str, Union[str, int]]:
+    def load_email_config() -> dict[str, str | int]:
         """
         Load email configuration from environment variables.
 
@@ -48,9 +48,7 @@ class Config:
 
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
-            raise ValueError(
-                f"Missing required environment variables: {', '.join(missing_vars)}"
-            )
+            raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
 
         return config
 

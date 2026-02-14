@@ -2,9 +2,11 @@
 Tests for components.py module.
 """
 
+from unittest.mock import Mock, patch
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-from components import is_valid_email, PortfolioComponents
+
+from components import PortfolioComponents, is_valid_email
 
 
 class TestEmailValidation:

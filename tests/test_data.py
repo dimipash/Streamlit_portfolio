@@ -2,7 +2,6 @@
 Tests for data.py module.
 """
 
-import pytest
 from data import PortfolioData
 
 
@@ -39,9 +38,7 @@ class TestSkillsData:
 
         for skill_name, skill_data in skills.items():
             proficiency = skill_data["proficiency"]
-            assert 0 <= proficiency <= 100, (
-                f"{skill_name} proficiency out of range: {proficiency}"
-            )
+            assert 0 <= proficiency <= 100, f"{skill_name} proficiency out of range: {proficiency}"
 
     def test_skills_categories_valid(self):
         """Test all skills have valid categories."""
@@ -64,9 +61,7 @@ class TestSkillsData:
 
         for skill_name, skill_data in skills.items():
             experience = skill_data["experience_years"]
-            assert experience > 0, (
-                f"{skill_name} has invalid experience years: {experience}"
-            )
+            assert experience > 0, f"{skill_name} has invalid experience years: {experience}"
 
 
 class TestProjectsData:

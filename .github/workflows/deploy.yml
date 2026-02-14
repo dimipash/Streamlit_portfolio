@@ -1,0 +1,37 @@
+name: Deploy to Streamlit Cloud
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Allow manual deployment
+
+jobs:
+  deploy-info:
+    name: Deployment Information
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deployment Notice
+      run: |
+        echo "## Deployment Status" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Code pushed to main branch" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "🚀 If connected to Streamlit Cloud, your app will auto-deploy" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Setup Streamlit Cloud Deployment:" >> $GITHUB_STEP_SUMMARY
+        echo "1. Visit https://share.streamlit.io/" >> $GITHUB_STEP_SUMMARY
+        echo "2. Connect this repository" >> $GITHUB_STEP_SUMMARY
+        echo "3. Set main file: \`main.py\`" >> $GITHUB_STEP_SUMMARY
+        echo "4. Add secrets from \`.env.template\` in Streamlit Cloud settings" >> $GITHUB_STEP_SUMMARY
+
+    - name: Check dependencies
+      run: |
+        echo "Verifying required files exist..."
+        test -f requirements.txt && echo "✅ requirements.txt found" || echo "❌ requirements.txt not found"
+        test -f main.py && echo "✅ main.py found" || echo "❌ main.py not found"
+        test -f .env.template && echo "✅ .env.template found" || echo "❌ .env.template not found"

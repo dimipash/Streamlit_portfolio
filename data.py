@@ -1,9 +1,7 @@
-from typing import List, Dict, Union
-
-SkillsDict = Dict[str, Dict[str, Union[int, str, float]]]
-ProjectDict = Dict[str, str]
-JobDict = Dict[str, Union[str, List[str]]]
-MetricsDict = Dict[str, Dict[str, Union[int, float, str]]]
+SkillsDict = dict[str, dict[str, int | str | float]]
+ProjectDict = dict[str, str]
+JobDict = dict[str, str | list[str]]
+MetricsDict = dict[str, dict[str, int | float | str]]
 
 
 class PortfolioData:
@@ -115,7 +113,7 @@ class PortfolioData:
         }
 
     @staticmethod
-    def get_soft_skills() -> List[str]:
+    def get_soft_skills() -> list[str]:
         """
         Returns list of soft skills.
 
@@ -131,7 +129,7 @@ class PortfolioData:
         ]
 
     @staticmethod
-    def get_projects_data() -> List[ProjectDict]:
+    def get_projects_data() -> list[ProjectDict]:
         """
         Returns list of project information.
 
@@ -192,7 +190,7 @@ class PortfolioData:
         ]
 
     @staticmethod
-    def get_employment_history() -> List[JobDict]:
+    def get_employment_history() -> list[JobDict]:
         """
         Returns employment history data.
 
@@ -265,7 +263,7 @@ class PortfolioData:
         ]
 
     @staticmethod
-    def get_education_data() -> List[Dict[str, Union[str, List[str]]]]:
+    def get_education_data() -> list[dict[str, str | list[str]]]:
         """
         Returns education data.
 

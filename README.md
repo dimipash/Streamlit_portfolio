@@ -1,5 +1,11 @@
 # Professional Portfolio Website with Streamlit
 
+[![CI](https://github.com/dimipash/Streamlit_portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/dimipash/Streamlit_portfolio/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/dimipash/Streamlit_portfolio/branch/main/graph/badge.svg)](https://codecov.io/gh/dimipash/Streamlit_portfolio)
+[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
+
 A modern, interactive portfolio showcasing professional skills, experience, and projects through an elegant web interface.
 
 ## Key Features
@@ -78,6 +84,71 @@ streamlit run main.py
 ```
 
 ## Development
+
+### Adding Dependencies
+```bash
+# Add a new dependency
+uv add package-name
+
+# Add development dependencies
+uv add --dev package-name
+
+# Update all dependencies
+uv sync --upgrade
+```
+
+### Running Tests
+```bash
+# Run all tests
+uv run pytest
+
+# Run tests with coverage
+uv run pytest --cov
+
+# Run specific test file
+uv run pytest tests/test_data.py
+
+# Run tests in watch mode (requires pytest-watch)
+uv run ptw
+```
+
+### Code Quality
+```bash
+# Run linter
+uv run ruff check .
+
+# Auto-fix linting issues
+uv run ruff check --fix .
+
+# Format code
+uv run ruff format .
+
+# Check formatting without changes
+uv run ruff format --check .
+```
+
+### Running Commands
+```bash
+# Run any command in the project environment
+uv run python script.py
+uv run streamlit run main.py
+
+# Or activate the environment
+source .venv/bin/activate  # On Windows: .venv\\Scripts\\activate
+```
+
+## Continuous Integration
+
+This project uses GitHub Actions for CI/CD:
+
+- **Automated Testing**: All tests run on every push and pull request
+- **Code Quality**: Linting and formatting checks with Ruff
+- **Coverage Reports**: Test coverage tracked with Codecov
+- **Python 3.13**: Tests run on latest Python version
+
+See [.github/workflows/ci.yml](.github/workflows/ci.yml) for the full CI configuration.
+
+## Customization
 
 ### Adding Dependencies
 ```bash

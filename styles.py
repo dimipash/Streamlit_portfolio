@@ -3,10 +3,11 @@ Module for managing custom CSS styles for the portfolio website.
 This module provides functions to generate and manage CSS styles for the Streamlit application.
 """
 
+
 def get_custom_css() -> str:
     """
     Generate custom CSS styles for the portfolio website.
-    
+
     Returns:
         str: A string containing all custom CSS styles for the website.
     """

@@ -7,14 +7,13 @@ It includes sections for skills, projects, contact information with improved
 performance, security, and maintainability.
 """
 
-import streamlit as st
-from typing import Optional
 import logging
-from datetime import datetime
 
-from config import Config
+import streamlit as st
+
 from analytics import Analytics
 from components import PortfolioComponents
+from config import Config
 from data import PortfolioData
 from styles import get_custom_css
 
@@ -108,9 +107,7 @@ class PortfolioApp:
                 render_func()
             except Exception as e:
                 logger.error(f"Error rendering {section_name} section: {str(e)}")
-                st.error(
-                    f"Failed to load {section_name} section. Please refresh the page."
-                )
+                st.error(f"Failed to load {section_name} section. Please refresh the page.")
 
     def render_home(self) -> None:
         """Render home section."""

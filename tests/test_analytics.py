@@ -2,7 +2,6 @@
 Tests for analytics.py module.
 """
 
-import pytest
 from analytics import Analytics
 
 
