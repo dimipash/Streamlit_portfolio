@@ -165,7 +165,14 @@ class PortfolioData:
                 "name": "Python AI Projects",
                 "date": "2024 - Present",
                 "description": "A collection of small to medium-sized projects focused on exploring various applications of Artificial Intelligence (AI) using Python and related technologies. Projects include AI research agents, voice assistants, coding mentors, web scrapers, and more.",
-                "tech_stack": ["Python", "LangChain", "Flask", "Streamlit", "FastAPI", "MongoDB"],
+                "tech_stack": [
+                    "Python",
+                    "LangChain",
+                    "Flask",
+                    "Streamlit",
+                    "FastAPI",
+                    "MongoDB",
+                ],
                 "github_link": "https://github.com/dimipash/AI-PYTHON-PROJECTS",
             },
             {
@@ -181,5 +188,121 @@ class PortfolioData:
                 "description": "A chatbot powered by Llama3.1, built with Flask. The chatbot can engage in natural conversations and answer user queries.",
                 "tech_stack": ["Python", "Flask", "Llama3.1"],
                 "github_link": "https://github.com/dimipash/LLAMA3.1_FLASK_CHATBOT",
+            },
+        ]
+
+    @staticmethod
+    def get_employment_history() -> List[JobDict]:
+        """
+        Returns employment history data.
+
+        Returns:
+            List[JobDict]: List of job dictionaries
+        """
+        return [
+            {
+                "title": "MPI Operator",
+                "company": "Bifrangi UK",
+                "location": "Lincoln, UK",
+                "date": "OCT 2017 - SEP 2024",
+                "responsibilities": [
+                    "Ensured quality control via MPI equipment operation",
+                    "Boosted product quality by maintaining defect detection rates",
+                    "Interpreted MPI results for process enhancements",
+                    "Collaborated for swift quality issue resolutions",
+                    "Implemented safety protocols, reducing workplace incidents",
+                ],
+            },
+            {
+                "title": "Production Operative",
+                "company": "Parkacre",
+                "location": "Lincoln",
+                "date": "APR 2017 - SEP 2017",
+                "responsibilities": [
+                    "Operated machinery to ensure smooth production flow",
+                    "Collaborated with team to meet daily production targets",
+                ],
+            },
+            {
+                "title": "Production Operative",
+                "company": "Moypark",
+                "location": "Lincoln",
+                "date": "JAN 2015 - MAR 2017",
+                "responsibilities": [
+                    "Operated machinery to ensure smooth production flow",
+                    "Collaborated with team to meet daily production targets",
+                ],
+            },
+            {
+                "title": "Production Worker",
+                "company": "Hall Hunter Partnership",
+                "location": "Chichester",
+                "date": "JAN 2014 - SEP 2014",
+                "responsibilities": [
+                    "Aggriculture and maintenance of farm equipment",
+                ],
+            },
+            {
+                "title": "Phone Agent Debt Collector",
+                "company": "Kronos Recovery Management",
+                "location": "Sofia",
+                "date": "SEP 2012 - DEC 2013",
+                "responsibilities": [
+                    "Collected debts from customers",
+                    "Provided phone support to customers",
+                ],
+            },
+            {
+                "title": "Security Guard",
+                "company": "Bodu SOD",
+                "location": "Sofia",
+                "date": "SEP 2010 - SEP 2011",
+                "responsibilities": [
+                    "Collected debts from customers",
+                    "Provided phone support to customers",
+                ],
+            },
+        ]
+
+    @staticmethod
+    def get_education_data() -> List[Dict[str, Union[str, List[str]]]]:
+        """
+        Returns education data.
+
+        Returns:
+            List[Dict]: List of education dictionaries
+        """
+        return [
+            {
+                "degree": "Python Web Developer",
+                "school": "SoftUni",
+                "date": "2022 - 2024",
+                "details": [
+                    "Python OOP",
+                    "Python Advanced",
+                    "Python Web Basics (Django)",
+                    "Python Web Framework (Django Advanced)",
+                    "HTML & CSS",
+                    "JavaScript Front-End",
+                    "ReactJS",
+                ],
+            },
+            {
+                "degree": "Economics of Defense and Security",
+                "school": "University Of National And World Economy",
+                "date": "SEP 2006 - JUN 2010",
+                "location": "Sofia",
+                "details": [
+                    "Economics of Defense and Security",
+                ],
+            },
+            {
+                "degree": "Mathematics with English",
+                "school": "Gymnasium of Natural Sciences and Mathematics",
+                "location": "Sliven",
+                "date": "SEP 2001 - MAY 2006",
+                "details": [
+                    "Mathematics with English",
+                ],
             },
         ]

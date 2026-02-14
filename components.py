@@ -4,6 +4,8 @@ Contains reusable UI components with caching and performance optimizations.
 """
 
 from typing import List, Dict, Union, Optional
+import os
+import re
 import streamlit as st
 from PIL import Image
 import requests
@@ -13,6 +15,20 @@ from functools import lru_cache
 from config import Config
 from analytics import Analytics
 from data import PortfolioData
+
+
+def is_valid_email(email: str) -> bool:
+    """
+    Validate email format using regex.
+
+    Args:
+        email (str): Email address to validate
+
+    Returns:
+        bool: True if email is valid, False otherwise
+    """
+    pattern = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    return re.match(pattern, email) is not None
 
 
 class PortfolioComponents:
@@ -44,7 +60,7 @@ class PortfolioComponents:
     @st.cache_data(ttl=3600)
     def fetch_github_data(username: str) -> Dict:
         """
-        Fetch and cache GitHub data.
+        Fetch and cache GitHub data with optional authentication.
 
         Args:
             username (str): GitHub username
@@ -54,7 +70,12 @@ class PortfolioComponents:
         """
         url = f"https://api.github.com/users/{username}/repos"
         try:
-            response = requests.get(url, timeout=10)
+            headers = {}
+            github_token = os.getenv("GITHUB_TOKEN")
+            if github_token:
+                headers["Authorization"] = f"token {github_token}"
+
+            response = requests.get(url, timeout=10, headers=headers)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:
@@ -94,7 +115,9 @@ class PortfolioComponents:
             st.error("Resume file not found.")
 
     @staticmethod
-    def render_skills_section(skills_data: Dict[str, Dict[str, Union[int, str, float]]]) -> None:
+    def render_skills_section(
+        skills_data: Dict[str, Dict[str, Union[int, str, float]]],
+    ) -> None:
         """
         Render skills section with categories and proficiency bars.
 
@@ -110,8 +133,8 @@ class PortfolioComponents:
 
         for category, skills in skills_by_category.items():
             st.subheader(f"🔹 {category}")
-            skill_chunks = [skills[i:i + 3] for i in range(0, len(skills), 3)]
-            
+            skill_chunks = [skills[i : i + 3] for i in range(0, len(skills), 3)]
+
             for chunk in skill_chunks:
                 cols = st.columns(len(chunk))
                 for i, (skill, proficiency) in enumerate(
@@ -125,7 +148,9 @@ class PortfolioComponents:
                         st.progress(proficiency / 100)
 
     @staticmethod
-    def render_project_metrics(project_name: str, metrics: Dict[str, Union[int, float, str]]) -> None:
+    def render_project_metrics(
+        project_name: str, metrics: Dict[str, Union[int, float, str]]
+    ) -> None:
         """
         Render project metrics in columns.
 
@@ -137,11 +162,11 @@ class PortfolioComponents:
         with cols[0]:
             st.metric("Code Coverage", f"{metrics['code_coverage']}%")
         with cols[1]:
-            st.metric("Commits", metrics['commits'])
+            st.metric("Commits", metrics["commits"])
         with cols[2]:
-            st.metric("GitHub Stars", metrics['stars'])
+            st.metric("GitHub Stars", metrics["stars"])
         with cols[3]:
-            st.metric("Status", metrics['status'])
+            st.metric("Status", metrics["status"])
 
     def render_projects_section(self) -> None:
         """Render projects section with filtering and metrics."""
@@ -186,7 +211,7 @@ class PortfolioComponents:
     def render_github_section(self) -> None:
         """Render GitHub repositories section with caching."""
         st.title("My GitHub Repositories")
-        
+
         repos = self.fetch_github_data(self.config.GITHUB_USERNAME)
         if not repos:
             st.warning("No repositories found or unable to fetch data.")
@@ -199,8 +224,10 @@ class PortfolioComponents:
                     f"**Description:** {repo.get('description', 'No description available')}"
                 )
                 if repo.get("homepage"):
-                    st.write(f"**Live Version:** [{repo['homepage']}]({repo['homepage']})")
-                
+                    st.write(
+                        f"**Live Version:** [{repo['homepage']}]({repo['homepage']})"
+                    )
+
                 # Fetch languages
                 languages_url = repo["languages_url"]
                 try:
@@ -236,7 +263,7 @@ class PortfolioComponents:
                     st.error("Please fill in all fields")
                     return
 
-                if not "@" in email:
+                if not is_valid_email(email):
                     st.error("Please enter a valid email address")
                     return
 

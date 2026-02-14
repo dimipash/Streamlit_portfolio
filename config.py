@@ -6,6 +6,7 @@ Contains settings and environment configurations.
 import os
 from typing import Dict, Union
 from dataclasses import dataclass
+from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import smtplib
@@ -37,7 +38,7 @@ class Config:
         """
         load_dotenv()
         required_vars = ["EMAIL_HOST", "EMAIL_PORT", "EMAIL_USERNAME", "EMAIL_PASSWORD"]
-        
+
         config = {
             "host": os.getenv("EMAIL_HOST", "smtp.gmail.com"),
             "port": int(os.getenv("EMAIL_PORT", "587")),
@@ -47,7 +48,9 @@ class Config:
 
         missing_vars = [var for var in required_vars if not os.getenv(var)]
         if missing_vars:
-            raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
+            raise ValueError(
+                f"Missing required environment variables: {', '.join(missing_vars)}"
+            )
 
         return config
 
@@ -68,14 +71,14 @@ class Config:
             Exception: If email sending fails
         """
         # Rate limiting check
-        hour = st.session_state.get('current_hour', 0)
+        hour = st.session_state.get("current_hour", 0)
         current_hour = datetime.now().hour
-        
+
         if hour != current_hour:
             st.session_state.current_hour = current_hour
             st.session_state.email_count = 0
-        
-        if st.session_state.get('email_count', 0) >= Config.EMAIL_RATE_LIMIT:
+
+        if st.session_state.get("email_count", 0) >= Config.EMAIL_RATE_LIMIT:
             st.error("Email rate limit exceeded. Please try again later.")
             return False
 
@@ -96,7 +99,7 @@ class Config:
                 server.send_message(msg)
 
             # Increment email counter
-            st.session_state.email_count = st.session_state.get('email_count', 0) + 1
+            st.session_state.email_count = st.session_state.get("email_count", 0) + 1
             return True
 
         except Exception as e:
