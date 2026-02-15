@@ -72,6 +72,10 @@ class TestPortfolioComponents:
     @patch("components.Image.open")
     def test_load_image_success(self, mock_image_open):
         """Test successful image loading."""
+        # Clear cache
+        if hasattr(PortfolioComponents.load_image, "clear"):
+            PortfolioComponents.load_image.clear()
+
         mock_image = Mock()
         mock_image_open.return_value = mock_image
 
@@ -83,6 +87,10 @@ class TestPortfolioComponents:
     @patch("components.Image.open")
     def test_load_image_failure(self, mock_image_open):
         """Test image loading failure handling."""
+        # Clear cache
+        if hasattr(PortfolioComponents.load_image, "clear"):
+            PortfolioComponents.load_image.clear()
+
         mock_image_open.side_effect = FileNotFoundError("File not found")
 
         image = PortfolioComponents.load_image("nonexistent.jpg")
@@ -92,6 +100,10 @@ class TestPortfolioComponents:
     @patch("components.requests.get")
     def test_fetch_github_data_success(self, mock_get):
         """Test successful GitHub data fetching."""
+        # Clear cache
+        if hasattr(PortfolioComponents.fetch_github_data, "clear"):
+            PortfolioComponents.fetch_github_data.clear()
+
         mock_response = Mock()
         mock_response.json.return_value = [{"name": "repo1"}, {"name": "repo2"}]
         mock_response.raise_for_status = Mock()
@@ -106,6 +118,10 @@ class TestPortfolioComponents:
     @patch("components.requests.get")
     def test_fetch_github_data_with_token(self, mock_get):
         """Test GitHub data fetching with authentication token."""
+        # Clear cache
+        if hasattr(PortfolioComponents.fetch_github_data, "clear"):
+            PortfolioComponents.fetch_github_data.clear()
+
         mock_response = Mock()
         mock_response.json.return_value = []
         mock_response.raise_for_status = Mock()
@@ -123,6 +139,10 @@ class TestPortfolioComponents:
     @patch("components.requests.get")
     def test_fetch_github_data_failure(self, mock_get):
         """Test GitHub data fetching failure handling."""
+        # Clear cache
+        if hasattr(PortfolioComponents.fetch_github_data, "clear"):
+            PortfolioComponents.fetch_github_data.clear()
+
         mock_get.side_effect = Exception("Network error")
 
         data = PortfolioComponents.fetch_github_data("testuser")

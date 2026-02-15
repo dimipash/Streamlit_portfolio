@@ -94,6 +94,9 @@ class TestAnalytics:
 
     def test_most_viewed_project(self, reset_session_state):
         """Test getting the most viewed project."""
+        # Clear cache to avoid interference from other tests
+        Analytics._get_cached_project_views.cache_clear()
+
         Analytics.track_project_view("Project A")
         Analytics.track_project_view("Project B")
         Analytics.track_project_view("Project B")
