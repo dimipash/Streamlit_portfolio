@@ -20,7 +20,7 @@ def get_custom_css() -> str:
         --accent-orange: #ff7f00;
         --accent-blue: #00bfff;
         --accent-purple: #8a2be2;
-        
+
         /* Professional Colors */
         --bg-primary: #000000;
         --bg-secondary: #111111;
@@ -28,10 +28,10 @@ def get_custom_css() -> str:
         --text-primary: #ffffff;
         --text-secondary: #b0c4de;
         --border-color: rgba(0, 255, 127, 0.2);
-        
+
         /* Gradients */
         --gradient-primary: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
-        
+
         /* Spacing */
         --spacing-xs: 0.25rem;
         --spacing-sm: 0.5rem;
@@ -216,7 +216,7 @@ def get_custom_css() -> str:
             text-align: center;
             gap: 1.5rem;
         }
-        
+
         .profile-photo {
             width: 150px;
             height: 150px;

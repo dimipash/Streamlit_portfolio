@@ -280,7 +280,7 @@ class PortfolioComponents:
                 <p>© 2025 Dimitar Pashev. All rights reserved.</p>
                 <p>Built with ❤️ using Streamlit</p>
                 <p>
-                    <a href="https://github.com/dimipash" target="_blank">GitHub</a> • 
+                    <a href="https://github.com/dimipash" target="_blank">GitHub</a> •
                     <a href="https://www.linkedin.com/in/dimitar-pashev-994174274/" target="_blank">LinkedIn</a>
                 </p>
             </div>

@@ -78,10 +78,118 @@ A modern, interactive portfolio showcasing professional skills, experience, and 
 If you prefer using pip:
 ```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+source venv/bin/activate  # On Windows: venv\\Scripts\\activate
 pip install -r requirements.txt
 streamlit run main.py
 ```
+
+## Docker Deployment
+
+### Quick Start with Docker
+
+The easiest way to run the portfolio is using Docker:
+
+```bash
+# Build and run with Docker Compose (Development)
+docker-compose up
+
+# Or build and run with Docker Compose (Production)
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+Access the application at `http://localhost:8501`
+
+### Docker Options
+
+#### Option 1: Docker Compose (Recommended)
+
+**Development Mode** (with live code reload):
+```bash
+# Start development server
+docker-compose up
+
+# Run in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop containers
+docker-compose down
+```
+
+**Production Mode** (optimized):
+```bash
+# Start production server
+docker-compose -f docker-compose.prod.yml up -d
+
+# View logs
+docker-compose -f docker-compose.prod.yml logs -f
+
+# Stop containers
+docker-compose -f docker-compose.prod.yml down
+```
+
+#### Option 2: Plain Docker
+
+```bash
+# Build the image
+docker build -t streamlit-portfolio .
+
+# Run the container
+docker run -p 8501:8501 --env-file .env streamlit-portfolio
+
+# Run in background
+docker run -d -p 8501:8501 --env-file .env streamlit-portfolio
+
+# With custom environment variables
+docker run -p 8501:8501 \
+  -e EMAIL_HOST=smtp.gmail.com \
+  -e EMAIL_PORT=587 \
+  -e EMAIL_USERNAME=your@email.com \
+  -e EMAIL_PASSWORD=yourpassword \
+  streamlit-portfolio
+```
+
+### Docker Features
+
+- ✅ **Multi-stage build** - Small image size (~150MB)
+- ✅ **Non-root user** - Security best practices
+- ✅ **Health checks** - Container monitoring
+- ✅ **Volume mounts** - Development hot-reload
+- ✅ **Environment variables** - Easy configuration
+- ✅ **Production-ready** - Resource limits and logging
+
+### Docker Environment Setup
+
+1. **Copy environment template**:
+   ```bash
+   cp .env.template .env
+   ```
+
+2. **Edit .env file** with your credentials:
+   ```bash
+   EMAIL_HOST=smtp.gmail.com
+   EMAIL_PORT=587
+   EMAIL_USERNAME=your.email@gmail.com
+   EMAIL_PASSWORD=your_app_specific_password
+   GITHUB_TOKEN=your_github_token_here  # Optional
+   ```
+
+3. **Run with Docker**:
+   ```bash
+   docker-compose up
+   ```
+
+### Deployment Platforms
+
+Deploy the Docker container to:
+- **AWS ECS/Fargate** - Fully managed containers
+- **Google Cloud Run** - Serverless containers
+- **Azure Container Instances** - Quick container deployment
+- **DigitalOcean App Platform** - Simple container hosting
+- **Railway** - One-click container deployment
+- **Fly.io** - Global container deployment
 
 ## Development
 
