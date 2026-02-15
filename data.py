@@ -148,15 +148,14 @@ class PortfolioData:
                     "JavaScript",
                     "Bootstrap",
                 ],
-                "live_demo": "https://online-shop-django-project-production.up.railway.app/",
+                "live_demo": "https://dimipi.pythonanywhere.com/",
                 "github_link": "https://github.com/dimipash/ONLINE_SHOP_DJANGO_PROJECT",
             },
             {
                 "name": "SaaS Django Project",
                 "date": "05/2025 - 05/2025",
                 "description": "A foundational Software as a Service (SaaS) solution built with Django, featuring user authentication, subscription management, and custom commands.",
-                "tech_stack": ["Python", "Django", "PostgreSQL", "Docker"],
-                "live_demo": "https://saas-dlp.up.railway.app/",
+                "tech_stack": ["Python", "Django", "PostgreSQL", "Docker"],                
                 "github_link": "https://github.com/dimipash/SAAS",
             },
             {
