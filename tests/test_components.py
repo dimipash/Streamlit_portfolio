@@ -14,48 +14,48 @@ class TestEmailValidation:
 
     def test_valid_email_basic(self):
         """Test basic valid email format."""
-        assert is_valid_email("test@example.com") == True
-        assert is_valid_email("user@domain.org") == True
-        assert is_valid_email("name@company.co.uk") == True
+        assert is_valid_email("test@example.com")
+        assert is_valid_email("user@domain.org")
+        assert is_valid_email("name@company.co.uk")
 
     def test_valid_email_with_special_chars(self):
         """Test valid emails with special characters."""
-        assert is_valid_email("user.name@example.com") == True
-        assert is_valid_email("user+tag@example.com") == True
-        assert is_valid_email("user_name@example.com") == True
-        assert is_valid_email("user-name@example.com") == True
+        assert is_valid_email("user.name@example.com")
+        assert is_valid_email("user+tag@example.com")
+        assert is_valid_email("user_name@example.com")
+        assert is_valid_email("user-name@example.com")
 
     def test_invalid_email_no_at_symbol(self):
         """Test invalid emails without @ symbol."""
-        assert is_valid_email("invalidemail.com") == False
-        assert is_valid_email("user") == False
+        assert not is_valid_email("invalidemail.com")
+        assert not is_valid_email("user")
 
     def test_invalid_email_multiple_at_symbols(self):
         """Test invalid emails with multiple @ symbols."""
-        assert is_valid_email("@@@@") == False
-        assert is_valid_email("user@@example.com") == False
-        assert is_valid_email("user@domain@com") == False
+        assert not is_valid_email("@@@@")
+        assert not is_valid_email("user@@example.com")
+        assert not is_valid_email("user@domain@com")
 
     def test_invalid_email_missing_parts(self):
         """Test invalid emails missing username or domain."""
-        assert is_valid_email("@example.com") == False
-        assert is_valid_email("user@") == False
-        assert is_valid_email("@") == False
+        assert not is_valid_email("@example.com")
+        assert not is_valid_email("user@")
+        assert not is_valid_email("@")
 
     def test_invalid_email_no_tld(self):
         """Test invalid emails without top-level domain."""
-        assert is_valid_email("user@domain") == False
-        assert is_valid_email("user@localhost") == False
+        assert not is_valid_email("user@domain")
+        assert not is_valid_email("user@localhost")
 
     def test_invalid_email_spaces(self):
         """Test invalid emails with spaces."""
-        assert is_valid_email("user @example.com") == False
-        assert is_valid_email("user@ example.com") == False
-        assert is_valid_email("user@example .com") == False
+        assert not is_valid_email("user @example.com")
+        assert not is_valid_email("user@ example.com")
+        assert not is_valid_email("user@example .com")
 
     def test_empty_or_none_email(self):
         """Test empty or None email."""
-        assert is_valid_email("") == False
+        assert not is_valid_email("")
         with pytest.raises((TypeError, AttributeError)):
             is_valid_email(None)
 

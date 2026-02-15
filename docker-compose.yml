@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: streamlit-portfolio-dev
+    ports:
+      - "8501:8501"
+    volumes:
+      # Mount source code for live reload during development
+      - ./main.py:/app/main.py
+      - ./components.py:/app/components.py
+      - ./config.py:/app/config.py
+      - ./data.py:/app/data.py
+      - ./styles.py:/app/styles.py
+      - ./analytics.py:/app/analytics.py
+      # Mount static assets
+      - ./photo.jpeg:/app/photo.jpeg
+      - ./resume.pdf:/app/resume.pdf
+    environment:
+      # Load environment variables from .env file
+      - EMAIL_HOST=${EMAIL_HOST:-smtp.gmail.com}
+      - EMAIL_PORT=${EMAIL_PORT:-587}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+    env_file:
+      - .env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8501/_stcore/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    networks:
+      - portfolio-network
+
+networks:
+  portfolio-network:
+    driver: bridge
