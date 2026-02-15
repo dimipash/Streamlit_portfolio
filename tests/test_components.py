@@ -2,11 +2,12 @@
 Tests for components.py module.
 """
 
-from unittest.mock import Mock, patch
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 import requests
 
+import components
 from components import PortfolioComponents, is_valid_email
 
 
@@ -84,9 +85,6 @@ class TestPortfolioComponents:
         # Now that we've patched components.st, it should use the mock.
 
         # Verify components.st is indeed our mock
-        import components
-        from unittest.mock import MagicMock
-
         assert isinstance(components.st, MagicMock)
 
         image = PortfolioComponents.load_image("test.jpg")

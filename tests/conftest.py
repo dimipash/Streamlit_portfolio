@@ -24,10 +24,19 @@ class MockSessionState(dict):
         self[key] = value
 
 
+def mock_cache_data(ttl=None):
+    def decorator(func):
+        func.clear = MagicMock()
+        return func
+
+    return decorator
+
+
 # Global mock for streamlit to ensure it's used during import time
 mock_st = MagicMock()
 mock_st.session_state = MockSessionState()
-mock_st.cache_data = lambda ttl=None: lambda func: func
+mock_st.cache_data = mock_cache_data
+mock_st.empty = MagicMock()  # For loading spinner
 
 # Patch sys.modules immediately so that any subsequent imports use the mock
 sys.modules["streamlit"] = mock_st
@@ -40,7 +49,7 @@ def reset_streamlit_mock():
     mock_st.session_state.clear()
 
     # Re-apply the mock helpers that might have been cleared
-    mock_st.cache_data = lambda ttl=None: lambda func: func
+    mock_st.cache_data = mock_cache_data
 
     # Ensure session_state is still our custom class
     if not isinstance(mock_st.session_state, MockSessionState):
