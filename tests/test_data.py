@@ -131,7 +131,7 @@ class TestProjectMetrics:
         """Test metric values are in valid ranges."""
         metrics = PortfolioData.get_project_metrics()
 
-        for project_name, project_metrics in metrics.items():
+        for _, project_metrics in metrics.items():
             # Code coverage should be 0-100
             assert 0 <= project_metrics["code_coverage"] <= 100
 

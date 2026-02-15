@@ -12,34 +12,46 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
+# Create a session state that supports both dict and attribute access
+class MockSessionState(dict):
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError(key) from None
+
+    def __setattr__(self, key, value):
+        self[key] = value
+
+
+# Global mock for streamlit to ensure it's used during import time
+mock_st = MagicMock()
+mock_st.session_state = MockSessionState()
+mock_st.cache_data = lambda ttl=None: lambda func: func
+
+# Patch sys.modules immediately so that any subsequent imports use the mock
+sys.modules["streamlit"] = mock_st
+
+
 @pytest.fixture(autouse=True)
-def mock_streamlit():
-    """Mock Streamlit for all tests to avoid UI dependencies."""
-    mock_st = MagicMock()
+def reset_streamlit_mock():
+    """Reset the global mock state before each test."""
+    mock_st.reset_mock()
+    mock_st.session_state.clear()
 
-    # Create a session state that supports both dict and attribute access
-    class MockSessionState(dict):
-        def __getattr__(self, key):
-            try:
-                return self[key]
-            except KeyError:
-                raise AttributeError(key)
-
-        def __setattr__(self, key, value):
-            self[key] = value
-
-    mock_st.session_state = MockSessionState()
+    # Re-apply the mock helpers that might have been cleared
     mock_st.cache_data = lambda ttl=None: lambda func: func
-    sys.modules["streamlit"] = mock_st
+
+    # Ensure session_state is still our custom class
+    if not isinstance(mock_st.session_state, MockSessionState):
+        mock_st.session_state = MockSessionState()
+
     yield mock_st
-    # Cleanup
-    if "streamlit" in sys.modules:
-        del sys.modules["streamlit"]
 
 
 @pytest.fixture
-def reset_session_state(mock_streamlit):
+def reset_session_state(reset_streamlit_mock):
     """Reset Streamlit session state between tests."""
-    mock_streamlit.session_state.clear()
+    mock_st.session_state.clear()
     yield
-    mock_streamlit.session_state.clear()
+    mock_st.session_state.clear()

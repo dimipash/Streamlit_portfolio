@@ -5,6 +5,7 @@ Tests for components.py module.
 from unittest.mock import Mock, patch
 
 import pytest
+import requests
 
 from components import PortfolioComponents, is_valid_email
 
@@ -72,12 +73,21 @@ class TestPortfolioComponents:
     @patch("components.Image.open")
     def test_load_image_success(self, mock_image_open):
         """Test successful image loading."""
-        # Clear cache
-        if hasattr(PortfolioComponents.load_image, "clear"):
-            PortfolioComponents.load_image.clear()
-
+        # Manually set the return value
         mock_image = Mock()
         mock_image_open.return_value = mock_image
+
+        # Bypass caching during test if needed, or rely on mock_st
+        # In this specific test, we want to test the function logic.
+        # Since st.cache_data is mocked in conftest, it should be a pass-through.
+        # However, it seems the previous failures were due to real streamlit being used.
+        # Now that we've patched components.st, it should use the mock.
+
+        # Verify components.st is indeed our mock
+        import components
+        from unittest.mock import MagicMock
+
+        assert isinstance(components.st, MagicMock)
 
         image = PortfolioComponents.load_image("test.jpg")
 
@@ -143,7 +153,7 @@ class TestPortfolioComponents:
         if hasattr(PortfolioComponents.fetch_github_data, "clear"):
             PortfolioComponents.fetch_github_data.clear()
 
-        mock_get.side_effect = Exception("Network error")
+        mock_get.side_effect = requests.exceptions.RequestException("Network error")
 
         data = PortfolioComponents.fetch_github_data("testuser")
 

@@ -35,7 +35,7 @@ class TestPortfolioApp:
 
         from main import PortfolioApp
 
-        app = PortfolioApp()
+        PortfolioApp()
 
         # Check that visit_tracked was set
         assert mock_st.session_state.visit_tracked is not None
@@ -58,9 +58,13 @@ class TestPortfolioApp:
         # Get the HTML that was passed to markdown
         navbar_html = None
         for call in mock_st.markdown.call_args_list:
-            if len(call[0]) > 0 and "nav-container" in str(call[0][0]):
-                navbar_html = call[0][0]
-                break
+            args = call[0]
+            if len(args) > 0:
+                html = str(args[0])
+                # Check for specific navbar indicators and ensure it's not just the CSS style block
+                if "nav-container" in html and "<nav" in html:
+                    navbar_html = html
+                    break
 
         assert navbar_html is not None
         # Check for navigation sections

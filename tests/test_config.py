@@ -112,7 +112,7 @@ class TestConfig:
             subject="Test Subject", body="Test Body", from_email="sender@example.com"
         )
 
-        assert result == True
+        assert result
         mock_server.starttls.assert_called_once()
         mock_server.login.assert_called_once()
         mock_server.send_message.assert_called_once()
@@ -138,4 +138,4 @@ class TestConfig:
             subject="Test Subject", body="Test Body", from_email="sender@example.com"
         )
 
-        assert result == False
+        assert not result
