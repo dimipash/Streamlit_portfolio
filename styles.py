@@ -13,15 +13,12 @@ def get_custom_css() -> str:
     """
     return """
 <style>
-    /* Modern Theme Configuration */
     :root {
-        /* Vivid Accents */
         --accent-green: #00ff7f;
         --accent-orange: #ff7f00;
         --accent-blue: #00bfff;
         --accent-purple: #8a2be2;
 
-        /* Professional Colors */
         --bg-primary: #000000;
         --bg-secondary: #111111;
         --bg-tertiary: #1a1a1a;
@@ -29,10 +26,8 @@ def get_custom_css() -> str:
         --text-secondary: #b0c4de;
         --border-color: rgba(0, 255, 127, 0.2);
 
-        /* Gradients */
         --gradient-primary: linear-gradient(135deg, var(--accent-green), var(--accent-blue));
 
-        /* Spacing */
         --spacing-xs: 0.25rem;
         --spacing-sm: 0.5rem;
         --spacing-md: 1rem;
@@ -40,7 +35,6 @@ def get_custom_css() -> str:
         --spacing-xl: 4rem;
     }
 
-    /* Global Styles */
     .stApp {
         background-color: var(--bg-primary);
         color: var(--text-primary);
@@ -54,7 +48,6 @@ def get_custom_css() -> str:
         margin-top: 0;
     }
 
-    /* Navigation */
     .nav-container {
         position: fixed;
         top: 0;
@@ -100,20 +93,17 @@ def get_custom_css() -> str:
         padding: 1rem 0;
     }
 
-    /* Main Content Spacing */
     .main-content {
-        margin-top: 80px;  /* Space for fixed navbar */
+        margin-top: 80px;
         padding: 20px;
     }
 
-    /* Responsive Design */
     @media (max-width: 768px) {
         .nav-container {
             padding: 0.5rem;
         }
     }
 
-    /* Profile Section */
     .profile-container {
         display: flex;
         align-items: center;
@@ -133,7 +123,6 @@ def get_custom_css() -> str:
         max-width: 600px;
     }
 
-    /* Section Containers */
     .home-section,
     .skills-section,
     .projects-section,
@@ -165,7 +154,6 @@ def get_custom_css() -> str:
         box-shadow: 0 10px 30px rgba(0, 255, 127, 0.1);
     }
 
-    /* Accessibility Improvements */
     .nav-link:focus,
     a:focus,
     button:focus {
@@ -173,7 +161,6 @@ def get_custom_css() -> str:
         outline-offset: 2px;
     }
 
-    /* Screen Reader Only Text */
     .sr-only {
         position: absolute;
         width: 1px;
@@ -186,7 +173,6 @@ def get_custom_css() -> str:
         border: 0;
     }
 
-    /* Dark Mode Toggle */
     .theme-toggle {
         position: fixed;
         bottom: 2rem;
@@ -209,7 +195,6 @@ def get_custom_css() -> str:
         transform: scale(1.1);
     }
 
-    /* Mobile Responsiveness for Profile */
     @media (max-width: 768px) {
         .profile-container {
             flex-direction: column;
@@ -223,7 +208,6 @@ def get_custom_css() -> str:
         }
     }
 
-    /* Typography */
     h1, h2, h3, h4, h5, h6 {
         color: var(--text-primary);
         margin-bottom: var(--spacing-md);
@@ -254,7 +238,6 @@ def get_custom_css() -> str:
         margin-bottom: var(--spacing-md);
     }
 
-    /* Links */
     a {
         color: var(--accent-green) !important;
         text-decoration: none !important;
@@ -265,7 +248,6 @@ def get_custom_css() -> str:
         color: var(--accent-orange) !important;
     }
 
-    /* Input Fields */
     .stTextInput > div > div > input {
         background: var(--bg-tertiary) !important;
         border: 1px solid var(--border-color) !important;
@@ -279,7 +261,6 @@ def get_custom_css() -> str:
         box-shadow: 0 0 0 1px var(--accent-green) !important;
     }
 
-    /* Tables */
     .stTable {
         background: var(--bg-secondary) !important;
         border-radius: 8px !important;
@@ -291,14 +272,12 @@ def get_custom_css() -> str:
         color: var(--accent-green) !important;
     }
 
-    /* Code Blocks */
     .stCodeBlock {
         background: var(--bg-tertiary) !important;
         border: 1px solid var(--border-color) !important;
         border-radius: 8px !important;
     }
 
-    /* Metrics and KPIs */
     .metric-container {
         background: var(--bg-secondary);
         border: 1px solid var(--border-color);
@@ -314,7 +293,6 @@ def get_custom_css() -> str:
         color: var(--accent-green);
     }
 
-    /* Footer */
     .footer {
         text-align: center;
         padding: var(--spacing-lg);
@@ -322,7 +300,6 @@ def get_custom_css() -> str:
         border-top: 1px solid var(--border-color);
     }
 
-    /* Animations */
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
@@ -337,7 +314,6 @@ def get_custom_css() -> str:
         animation: fadeIn 0.5s ease forwards;
     }
 
-    /* Loading Spinner */
     .loading-spinner {
         display: inline-block;
         width: 40px;
@@ -348,12 +324,10 @@ def get_custom_css() -> str:
         animation: loading 1s linear infinite;
     }
 
-    /* Smooth Scrolling */
     html {
         scroll-behavior: smooth;
     }
 
-    /* Scrollbar Styling */
     ::-webkit-scrollbar {
         width: 8px;
     }
@@ -371,7 +345,6 @@ def get_custom_css() -> str:
         background: var(--accent-blue);
     }
 
-    /* Chat Messages */
     .user-message {
         color: white;
     }

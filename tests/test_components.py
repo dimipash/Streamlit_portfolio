@@ -74,17 +74,9 @@ class TestPortfolioComponents:
     @patch("components.Image.open")
     def test_load_image_success(self, mock_image_open):
         """Test successful image loading."""
-        # Manually set the return value
         mock_image = Mock()
         mock_image_open.return_value = mock_image
 
-        # Bypass caching during test if needed, or rely on mock_st
-        # In this specific test, we want to test the function logic.
-        # Since st.cache_data is mocked in conftest, it should be a pass-through.
-        # However, it seems the previous failures were due to real streamlit being used.
-        # Now that we've patched components.st, it should use the mock.
-
-        # Verify components.st is indeed our mock
         assert isinstance(components.st, MagicMock)
 
         image = PortfolioComponents.load_image("test.jpg")
@@ -95,7 +87,6 @@ class TestPortfolioComponents:
     @patch("components.Image.open")
     def test_load_image_failure(self, mock_image_open):
         """Test image loading failure handling."""
-        # Clear cache
         if hasattr(PortfolioComponents.load_image, "clear"):
             PortfolioComponents.load_image.clear()
 
@@ -108,7 +99,6 @@ class TestPortfolioComponents:
     @patch("components.requests.get")
     def test_fetch_github_data_success(self, mock_get):
         """Test successful GitHub data fetching."""
-        # Clear cache
         if hasattr(PortfolioComponents.fetch_github_data, "clear"):
             PortfolioComponents.fetch_github_data.clear()
 
@@ -126,7 +116,6 @@ class TestPortfolioComponents:
     @patch("components.requests.get")
     def test_fetch_github_data_with_token(self, mock_get):
         """Test GitHub data fetching with authentication token."""
-        # Clear cache
         if hasattr(PortfolioComponents.fetch_github_data, "clear"):
             PortfolioComponents.fetch_github_data.clear()
 
@@ -138,7 +127,6 @@ class TestPortfolioComponents:
         with patch.dict("os.environ", {"GITHUB_TOKEN": "test_token"}):
             PortfolioComponents.fetch_github_data("testuser")
 
-            # Check that Authorization header was included
             call_kwargs = mock_get.call_args[1]
             assert "headers" in call_kwargs
             assert "Authorization" in call_kwargs["headers"]
@@ -147,7 +135,6 @@ class TestPortfolioComponents:
     @patch("components.requests.get")
     def test_fetch_github_data_failure(self, mock_get):
         """Test GitHub data fetching failure handling."""
-        # Clear cache
         if hasattr(PortfolioComponents.fetch_github_data, "clear"):
             PortfolioComponents.fetch_github_data.clear()
 
@@ -161,7 +148,6 @@ class TestPortfolioComponents:
         """Test project metrics rendering with valid data."""
         metrics = {"code_coverage": 85, "commits": 120, "stars": 15, "status": "Active"}
 
-        # This should not raise any exceptions
         try:
             PortfolioComponents.render_project_metrics("Test Project", metrics)
         except KeyError as e:

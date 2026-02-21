@@ -38,7 +38,7 @@ class PortfolioComponents:
         self.config = Config()
 
     @staticmethod
-    @st.cache_data(ttl=3600)  # Cache for 1 hour
+    @st.cache_data(ttl=3600)
     def load_image(image_path: str) -> Image.Image | None:
         """
         Load and cache image.
@@ -221,7 +221,6 @@ class PortfolioComponents:
                 if repo.get("homepage"):
                     st.write(f"**Live Version:** [{repo['homepage']}]({repo['homepage']})")
 
-                # Fetch languages
                 languages_url = repo["languages_url"]
                 try:
                     languages_response = requests.get(languages_url, timeout=10)
@@ -265,7 +264,6 @@ class PortfolioComponents:
                 if Config.send_email(subject, formatted_message, email):
                     st.success("Thank you for your message! I'll get back to you soon.")
                     Analytics.track_contact_submission()
-                    # Clear form
                     st.session_state.name = ""
                     st.session_state.email = ""
                     st.session_state.subject = ""

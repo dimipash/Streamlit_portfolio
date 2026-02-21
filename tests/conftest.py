@@ -8,11 +8,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-# Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
-# Create a session state that supports both dict and attribute access
 class MockSessionState(dict):
     def __getattr__(self, key):
         try:
@@ -32,13 +30,11 @@ def mock_cache_data(ttl=None):
     return decorator
 
 
-# Global mock for streamlit to ensure it's used during import time
 mock_st = MagicMock()
 mock_st.session_state = MockSessionState()
 mock_st.cache_data = mock_cache_data
-mock_st.empty = MagicMock()  # For loading spinner
+mock_st.empty = MagicMock()
 
-# Patch sys.modules immediately so that any subsequent imports use the mock
 sys.modules["streamlit"] = mock_st
 
 
@@ -48,10 +44,8 @@ def reset_streamlit_mock():
     mock_st.reset_mock()
     mock_st.session_state.clear()
 
-    # Re-apply the mock helpers that might have been cleared
     mock_st.cache_data = mock_cache_data
 
-    # Ensure session_state is still our custom class
     if not isinstance(mock_st.session_state, MockSessionState):
         mock_st.session_state = MockSessionState()
 

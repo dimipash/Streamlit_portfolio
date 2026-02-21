@@ -27,7 +27,6 @@ class TestPortfolioApp:
     def test_track_visit_once(self, mock_st):
         """Test visit is tracked only once per session."""
         mock_st.session_state = MagicMock()
-        # Mock dictionary access for 'visit_tracked' check
         mock_st.session_state.__contains__.return_value = False
 
         mock_st.set_page_config = MagicMock()
@@ -37,7 +36,6 @@ class TestPortfolioApp:
 
         PortfolioApp()
 
-        # Check that visit_tracked was set
         assert mock_st.session_state.visit_tracked is not None
 
     @patch("main.st")
@@ -52,22 +50,18 @@ class TestPortfolioApp:
         app = PortfolioApp()
         app.create_navbar()
 
-        # Check markdown was called to create navbar
         assert mock_st.markdown.called
 
-        # Get the HTML that was passed to markdown
         navbar_html = None
         for call in mock_st.markdown.call_args_list:
             args = call[0]
             if len(args) > 0:
                 html = str(args[0])
-                # Check for specific navbar indicators and ensure it's not just the CSS style block
                 if "nav-container" in html and "<nav" in html:
                     navbar_html = html
                     break
 
         assert navbar_html is not None
-        # Check for navigation sections
         assert "#home" in navbar_html or "Home" in navbar_html
         assert "#skills" in navbar_html or "Skills" in navbar_html
         assert "#projects" in navbar_html or "Projects" in navbar_html
@@ -88,7 +82,6 @@ class TestPortfolioApp:
 
         app = PortfolioApp()
 
-        # Test individual render methods exist
         assert hasattr(app, "render_home")
         assert hasattr(app, "render_skills")
         assert hasattr(app, "render_projects")

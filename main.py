@@ -17,7 +17,6 @@ from config import Config
 from data import PortfolioData
 from styles import get_custom_css
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
@@ -237,7 +236,6 @@ class PortfolioApp:
             self.render_sections()
             self.components.render_footer()
 
-            # Add smooth scrolling behavior
             st.markdown(
                 """
                 <style>

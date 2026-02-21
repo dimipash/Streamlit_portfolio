@@ -72,7 +72,6 @@ class TestConfig:
             "EMAIL_HOST": "smtp.gmail.com",
             "EMAIL_PORT": "587",
             "EMAIL_USERNAME": "test@example.com",
-            # EMAIL_PASSWORD missing
         },
     )
     def test_load_email_config_partial_vars(self):
@@ -101,7 +100,6 @@ class TestConfig:
         mock_server = MagicMock()
         mock_smtp.return_value.__enter__.return_value = mock_server
 
-        # Mock session state
         import streamlit as st
 
         st.session_state.clear()

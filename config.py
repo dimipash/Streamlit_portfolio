@@ -23,7 +23,7 @@ class Config:
     PAGE_TITLE: str = "Dimitar Pashev - Portfolio"
     GITHUB_USERNAME: str = "dimipash"
     CONTACT_EMAIL: str = "dim.pashev@gmail.com"
-    EMAIL_RATE_LIMIT: int = 5  # Maximum emails per hour
+    EMAIL_RATE_LIMIT: int = 5
 
     @staticmethod
     def load_email_config() -> dict[str, str | int]:
@@ -68,7 +68,6 @@ class Config:
         Raises:
             Exception: If email sending fails
         """
-        # Rate limiting check
         hour = st.session_state.get("current_hour", 0)
         current_hour = datetime.now().hour
 
@@ -96,7 +95,6 @@ class Config:
                 server.login(email_config["username"], email_config["password"])
                 server.send_message(msg)
 
-            # Increment email counter
             st.session_state.email_count = st.session_state.get("email_count", 0) + 1
             return True
 

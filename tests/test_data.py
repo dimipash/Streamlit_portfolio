@@ -22,12 +22,10 @@ class TestSkillsData:
             assert isinstance(skill_name, str)
             assert isinstance(skill_data, dict)
 
-            # Check required fields
             assert "proficiency" in skill_data
             assert "category" in skill_data
             assert "experience_years" in skill_data
 
-            # Check field types
             assert isinstance(skill_data["proficiency"], (int, float))
             assert isinstance(skill_data["category"], str)
             assert isinstance(skill_data["experience_years"], (int, float))
@@ -132,13 +130,8 @@ class TestProjectMetrics:
         metrics = PortfolioData.get_project_metrics()
 
         for _, project_metrics in metrics.items():
-            # Code coverage should be 0-100
             assert 0 <= project_metrics["code_coverage"] <= 100
-
-            # Commits should be positive
             assert project_metrics["commits"] > 0
-
-            # Stars should be non-negative
             assert project_metrics["stars"] >= 0
 
 

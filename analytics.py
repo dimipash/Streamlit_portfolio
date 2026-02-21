@@ -58,7 +58,6 @@ class Analytics:
             analytics["project_views"][project_name] = 0
         analytics["project_views"][project_name] += 1
 
-        # Clear cache for this project
         Analytics._get_cached_project_views.cache_clear()
 
     @staticmethod
