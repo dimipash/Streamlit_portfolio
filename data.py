@@ -155,7 +155,7 @@ class PortfolioData:
                 "name": "SaaS Django Project",
                 "date": "05/2025 - 05/2025",
                 "description": "A foundational Software as a Service (SaaS) solution built with Django, featuring user authentication, subscription management, and custom commands.",
-                "tech_stack": ["Python", "Django", "PostgreSQL", "Docker"],                
+                "tech_stack": ["Python", "Django", "PostgreSQL", "Docker"],
                 "github_link": "https://github.com/dimipash/SAAS",
             },
             {
